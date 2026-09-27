@@ -246,19 +246,20 @@
     
     footer a { color: var(--accent); }
     
-    /* Floating dino */
+    /* Floating pterodactyl */
     .dino {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
       font-size: 4rem;
-      animation: float 3s ease-in-out infinite;
-      opacity: 0.6;
+      animation: fly 4s ease-in-out infinite;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 10px var(--accent-glow));
     }
     
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    @keyframes fly {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
     }
     
     @media (max-width: 600px) {
@@ -339,6 +340,14 @@
     </footer>
   </div>
 
-  <div class="dino">🦕</div>
+  <div class="dino">
+    <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Pterodactyl -->
+      <path d="M10 45 Q30 30 50 35 L70 25 L95 30 L75 40 L85 50 L60 55 L50 65 L35 60 Q20 55 10 45Z" fill="#7c3aed"/>
+      <circle cx="25" cy="42" r="3" fill="#00d4aa"/>
+      <path d="M50 35 Q55 30 60 35" stroke="#00d4aa" stroke-width="2" fill="none"/>
+      <path d="M30 45 Q20 35 15 40" stroke="#00d4aa" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
 </body>
 </html>
