@@ -6,11 +6,13 @@
 
 ## 🎯 Vision
 
-**3D Print Commission Marketplace** — Designers post specs, Makers bid, Platform connects them.
+**Print on Demand Platform** — Post a print job, makers compete, you pick.
 
-- Designers: Have 3D models, no printer, want custom prints
-- Makers: Have printers, need work, don't want to market
-- Platform: Takes commission on each job
+**The differentiator:** Nobody does the "post a request → makers bid" model. That's our edge.
+
+**What we print:**
+- Lead with: 3D prints (our differentiator)
+- Also: T-shirts, banners, stickers, vinyl, sublimation, charmanders, anything printed
 
 ---
 
@@ -26,32 +28,60 @@
 - **Access:** https://mail.zoho.com
 - **Verified:** Test emails sent successfully
 
-### Trademark Research
-- USPTO search completed
-- Printadactyl has no USPTO trademarks
-- Researched common law rights implications
+### Landing Page
+- Live at: https://printadactyl.vercel.app
+- Simple 3-step flow + Designer / Maker split
+
+### GitHub
+- Repo: https://github.com/CuriousCornucopious/printadactyl
 
 ---
 
 ## 🧠 The Idea
 
 **Problem:**
-- 3D designers create models but don't have printers
-- 3D makers have printers but don't want to run a shop/market
-- One-off prints are a huge pain point — nobody wants small batch orders
+- Designers have ideas but don't have printers
+- Makers have printers but don't want to run a shop or market themselves
+- One-off prints, bulk orders, custom jobs — nobody wants to hunt down a vendor
+- Existing POD = fixed prices, no competition, no bidding
 
 **Solution:**
-- Designer posts a request: "Print this model in this material, this size"
-- Multiple makers see the request and submit bids
-- Designer picks based on price + turnaround + rating
-- Maker prints and ships
+- Designer posts a job: "Print 30 Charmander shirts, size L, due in 2 weeks"
+- Multiple makers see it → submit bids (price, turnaround, portfolio)
+- Designer picks → Maker prints and ships
 - Platform takes commission
 
 **Why it works:**
 - No inventory for anyone
 - Makers get work without marketing
-- Designers get custom prints without buying a printer
-- "The Fiverr of 3D printing" — but the product doesn't exist until someone asks
+- Designers get custom/bulk prints without hunting vendors
+- Competition = better prices for buyers
+- "The Fiverr of Print on Demand"
+
+---
+
+## 🔄 Core Model: Post → Bid → Pick
+
+```
+[Designer/Buyer] posts request (what, how many, material, deadline)
+    ↓
+[Makers] see request, submit bids (price, turnaround, samples)
+    ↓
+[Designer/Buyer] reviews bids, picks a maker
+    ↓
+[Maker] prints and ships
+    ↓
+[Platform] takes commission, handles rating/reviews
+```
+
+---
+
+## 🏪 Storefronts (Version 2)
+
+- Sellers create their own Printadactyl shop
+- Can be: "I make 3D prints" or "I do banners"
+- Like Etsy shops — but with the bid model as option
+- Buyers can: Post a request OR browse existing shops
 
 ---
 
@@ -59,66 +89,52 @@
 
 | Platform | What it is | Gap |
 |----------|-----------|-----|
-| Shapeways | Was the big one, pivoted to enterprise | No longer hobbyist-friendly |
-| MakerWorld | Bambu Lab ecosystem | Locked to their hardware |
-| Thingiverse | Free file sharing | No commerce workflow |
-| Etsy | Some print-on-demand | Not purpose-built |
-| **Printadactyl** | Commission marketplace | **First of its kind** |
-
----
-
-## 🔄 Model: Designer ↔ Maker
-
-```
-[Designer] posts request (STL file, material, size, deadline)
-    ↓
-[Makers] see request, submit bids (price, turnaround, notes)
-    ↓
-[Designer] reviews bids, picks a maker
-    ↓
-[Maker] prints and ships
-    ↓
-[Platform] takes commission, handles review/rating
-```
+| Etsy | Handmade + POD | No bid model |
+| Printful/Printify | POD fulfillment | Fixed prices, no competition |
+| Shapeways | 3D printing | Was the one, pivoted away |
+| MakerWorld | 3D community | Bambu-locked |
+| Fiverr | Custom services | No print focus |
+| **Printadactyl** | Print bid marketplace | **First of its kind** |
 
 ---
 
 ## 📋 Next Steps
 
-### Phase 1: Foundation
-- [ ] Define core features (MVP)
+### Phase 1: MVP — The Bid Model
+- [ ] Define core features
 - [ ] Choose tech stack
-- [ ] Design user flow (Designer flow + Maker flow)
-- [ ] Build landing page
+- [ ] Build Designer flow (post request, upload specs)
+- [ ] Build Maker flow (see requests, submit bids)
+- [ ] Bid management (pick winner, messaging)
+- [ ] Basic payments/escrow
 
-### Phase 2: Core Platform
-- [ ] User accounts (Designer / Maker types)
-- [ ] Request posting (file upload, specs)
-- [ ] Bidding system
-- [ ] Messaging between users
-- [ ] Payment/escrow flow
+### Phase 2: Marketplace
+- [ ] Shop creation (designers sell finished designs)
+- [ ] Product listings (browse → buy → print)
+- [ ] Cart/checkout
+- [ ] Maker profiles + ratings
 
-### Phase 3: Launch
-- [ ] Beta with trusted makers
-- [ ] First successful prints
-- [ ] Gather feedback
-- [ ] Iterate
+### Phase 3: Scale
+- [ ] Seller storefronts
+- [ ] Bulk order support
+- [ ] Material options (3D, apparel, vinyl, etc.)
+- [ ] Auto-routing to best maker
 
 ---
 
 ## 💰 Revenue
 
 - Commission on each completed job (10-20%)
-- Could add: premium listings, featured makers, material surcharges
+- Could add: featured listings, maker subscriptions, material surcharges
 
 ---
 
 ## 🦕 Brand
 
-**Tagline ideas:**
-- "Your ideas take flight"
-- "From file to part"
+**Tagline:**
+- "Your ideas, printed."
 - "Print it. Done."
+- "From file to finished."
 
 **Vibe:** Fun, playful, tech-forward, accessible
 
