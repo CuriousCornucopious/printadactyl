@@ -1,7 +1,7 @@
 // Validation utilities for forms
 
 export interface ValidationRule {
-  validate: (value: any) => boolean
+  validate: (value: any, values?: any) => boolean
   message: string
 }
 
