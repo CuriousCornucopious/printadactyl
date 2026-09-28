@@ -43,6 +43,8 @@
 |-----|------|---------|
 | Domain purchased | Aug 2026 | printadactyl.com via Porkbun ($11.08/yr) |
 | Email setup | Aug 2026 | amandatedeschi@printadactyl.com via Zoho |
+| DNS setup | Sep 2026 | CNAME pointing to Vercel (cname.vercel-dns.com) |
+| HTTP working | Sep 2026 | Site loads via http:// (HTTPS needs time to propagate) |
 | Static landing page | Aug 2026 | First HTML version deployed |
 | Next.js migration | Sep 2026 | Full app rewrite from static HTML |
 | All pages built | Sep 2026 | 7 pages: Landing, Jobs, Job Detail, Post Job, Dashboard, Login, Signup |
