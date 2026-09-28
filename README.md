@@ -16,6 +16,8 @@
 | Keys saved securely | Stored in `.env.keys` (NOT committed to git) |
 | README updated | Added Wins/Losses/Executed Ideas/New Goals sections |
 | Code pushed | Full Next.js app pushed to GitHub |
+| Domain pointed to Vercel | DNS records updated via Porkbun API |
+| Porkbun API set up | Created keys via PKCE flow, working |
 
 ### Current Status
 
