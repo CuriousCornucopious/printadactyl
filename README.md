@@ -23,15 +23,12 @@
 
 - ✅ Supabase account + project ready
 - ✅ Database schema running in Supabase (SQL Editor)
+- ✅ RLS policies applied
 - ✅ Next.js code compiles and deploys successfully
 - ✅ Supabase API keys added to Vercel
+- ✅ Legal pages (Privacy Policy + Terms of Service)
 - ✅ **SITE IS LIVE at http://printadactyl.com**
-
-### What I Intend to Do Next
-
-1. Test signup/login flow
-2. Test posting a job
-3. Test browsing jobs
+- ⏳ Testing signup flow (in progress)
 
 ### What I Intend to Do Next
 
