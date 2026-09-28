@@ -1,7 +1,6 @@
-.vercel
-.env*
-.porkbun_keys
--e node_modules
+node_modules
 .next
 .env.local
 .env
+.vercel
+.porkbun_keys
