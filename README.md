@@ -22,18 +22,51 @@
 ### Current Status
 
 - ✅ Supabase account + project ready
-- ✅ API keys obtained (awaiting final connection)
-- ⚠️ Next step: Connect keys to app + run schema
+- ✅ Database schema running in Supabase (SQL Editor)
+- ✅ Next.js code compiles successfully
+- ⚠️ Next step: Add Supabase API keys to Vercel
 
 ### What I Intend to Do Next
 
-1. **Wait for your go-ahead** before executing any Supabase connection
-2. When confirmed, update `.env.local` with keys from `.env.keys`
-3. Run `schema.sql` in Supabase SQL Editor (you'll do this manually)
-4. Test the auth flow
-5. Deploy to Vercel with live database
+1. **Add Supabase keys to Vercel** (you'll do this):
+   - Go to: https://vercel.com/eva-68f8/printadactyl/settings/environment-variables
+   - Add `NEXT_PUBLIC_SUPABASE_URL` = `https://znwjmtvkengxxfagowylv.supabase.co`
+   - Add `NEXT_PUBLIC_SUPABASE_ANON_KEY` = your anon key from Supabase
+2. Vercel auto-deploys with keys
+3. Test signup/login flow
 
-**I will NOT execute anything until you explicitly say "go ahead" or "do it"**
+---
+
+## 📋 How to Add Supabase Keys to Vercel
+
+1. **Get your Supabase keys:**
+   - Go to: https://supabase.com/dashboard/project/znwjmtvkengxxfagowylv/settings/api
+   - Copy the **Project URL** (should be `https://znwjmtvkengxxfagowylv.supabase.co`)
+   - Copy the **anon public** key (starts with `eyJ...`)
+
+2. **Add them to Vercel:**
+   - Go to: https://vercel.com/eva-68f8/printadactyl/settings/environment-variables
+   - Add these two variables:
+     - `NEXT_PUBLIC_SUPABASE_URL` = your Project URL
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = your anon key
+   - Click Save
+   - Vercel auto-redeploys
+
+3. **Test it:**
+   - Visit http://printadactyl.com/signup
+   - Try creating an account
+
+---
+
+## 🏗️ Tech Stack Explained
+
+| Layer | What it does | Our Tool |
+|------|--------------|----------|
+| **Domain** | The address people type | printadactyl.com (Porkbun) |
+| **DNS** | Routes people to the right place | Porkbun → Vercel |
+| **Hosting** | Where the website files live | Vercel |
+| **Database** | Stores data (users, jobs, bids) | Supabase |
+| **Frontend** | What visitors see + interact with | Next.js |
 
 ---
 
