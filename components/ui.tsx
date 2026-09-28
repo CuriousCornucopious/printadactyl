@@ -177,7 +177,7 @@ interface BadgeProps {
   variant?: 'default' | 'success' | 'warning' | 'error' | 'info'
 }
 
-const badgeStyles: Record<BadgeProps['variant'], string> = {
+const badgeStyles: Record<NonNullable<BadgeProps['variant']>, string> = {
   default: 'bg-surface-light text-gray-300',
   success: 'bg-green-500/20 text-green-400',
   warning: 'bg-yellow-500/20 text-yellow-400',
