@@ -341,6 +341,22 @@
 5. Run `supabase/schema.sql` in SQL Editor → ⏸️
 6. Push to GitHub → Vercel deploys → ⏸️
 
+### ⚠️ Network/Firewall Issue (2026-09-28)
+
+**Problem:** This server (Heyron/AWS) cannot connect to Supabase via HTTPS.
+
+| Test | Result |
+|------|--------|
+| DNS resolution (`supabase.co`) | ✅ Works |
+| TCP connect to port 443 | ✅ Works |
+| SSL handshake | ❌ Blocked (SSL_ERROR_SYSCALL) |
+
+**Root cause:** Outbound HTTPS traffic to Supabase's IP range (`216.150.x.x`) is being blocked by the hosting infrastructure.
+
+**Solution:** 
+- Run `schema.sql` manually in Supabase SQL Editor: https://supabase.com/dashboard/project/znwjmtvkengxxfagowylv/sql
+- Contact Heyron (Robbie) to allow outbound traffic to Supabase
+
 **What's Ready:**
 - ✅ Next.js 14 + Tailwind CSS
 - ✅ Supabase client (server + browser)
