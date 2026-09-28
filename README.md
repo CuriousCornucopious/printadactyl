@@ -4,6 +4,54 @@
 
 ---
 
+## 🏆 Wins (Accomplishments)
+
+| Win | Date | Details |
+|-----|------|---------|
+| Domain purchased | Aug 2026 | printadactyl.com via Porkbun ($11.08/yr) |
+| Email setup | Aug 2026 | amandatedeschi@printadactyl.com via Zoho |
+| Static landing page | Aug 2026 | First HTML version deployed |
+| Next.js migration | Sep 2026 | Full app rewrite from static HTML |
+| All pages built | Sep 2026 | 7 pages: Landing, Jobs, Job Detail, Post Job, Dashboard, Login, Signup |
+| Supabase client | Sep 2026 | Server + browser clients ready |
+| Database schema | Sep 2026 | Full SQL with RLS policies |
+| Auth middleware | Sep 2026 | Protects dashboard/post-job routes |
+| Green brontosaurus mascot | Sep 2026 | Custom SVG pterodactyl → green brontosaurus |
+| GitHub repo | Sep 2026 | CuriousCornucopious/printadactyl |
+| Vercel connected | Sep 2026 | Auto-deploys from GitHub |
+| Supabase account created | Sep 2026 | Project "CuriousCornucopious's Project" ready |
+
+## 💀 Losses (Abandoned/Deprecated)
+
+| Loss | Reason | Replaced By |
+|------|--------|-------------|
+| Static HTML landing | Limited functionality, no auth | Next.js app |
+| Original pterodactyl mascot | Too generic | Green brontosaurus |
+| Firebase considered | NoSQL, wanted real PostgreSQL | Supabase |
+
+## 💡 Executed Ideas
+
+- **Bidding marketplace model** — unique angle (no competitors do this)
+- **3D prints as lead** — differentiated from generic print-on-demand
+- **Supabase over raw Postgres** — all-in-one (DB + auth + storage) reduces ops
+- **RLS-first security** — every table has policies from day 1
+- **Role-based users** — designer vs maker split
+
+## 🎯 New Goals
+
+- [ ] Get full anon key from Supabase
+- [ ] Connect Supabase to app (update .env.local)
+- [ ] Run schema.sql in Supabase SQL Editor
+- [ ] Test user signup/login flow
+- [ ] Seed 5 fake jobs for marketplace look
+- [ ] Deploy to Vercel with live DB
+- [ ] Recruit first designers (5-10)
+- [ ] Recruit first makers (5-10)
+- [ ] Stripe Connect for payments (Week 3)
+- [ ] First real job completed
+
+---
+
 ## 🎯 Vision
 
 **Printadactyl** is a print-on-demand marketplace built on a **bidding model** — designers post print jobs, multiple makers compete with bids, and the designer picks the winner.
