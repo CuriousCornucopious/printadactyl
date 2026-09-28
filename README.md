@@ -23,8 +23,15 @@
 
 - ✅ Supabase account + project ready
 - ✅ Database schema running in Supabase (SQL Editor)
-- ✅ Next.js code compiles successfully
-- ⚠️ Next step: Add Supabase API keys to Vercel
+- ✅ Next.js code compiles and deploys successfully
+- ✅ Supabase API keys added to Vercel
+- ✅ **SITE IS LIVE at http://printadactyl.com**
+
+### What I Intend to Do Next
+
+1. Test signup/login flow
+2. Test posting a job
+3. Test browsing jobs
 
 ### What I Intend to Do Next
 
