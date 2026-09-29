@@ -1,9 +1,11 @@
-export type UserRole = 'designer' | 'maker'
+export type UserRole = 'designer' | 'maker' | 'explorer'
+
+export type UserRoles = UserRole[] // Allow multiple roles
 
 export interface Profile {
   id: string
   email: string
-  role: UserRole
+  roles: UserRoles // Array of roles: designer, maker, explorer
   display_name: string
   created_at: string
 }
@@ -69,6 +71,6 @@ export interface CreateBidInput {
 
 export interface CreateProfileInput {
   email: string
-  role: UserRole
+  roles: UserRoles
   display_name: string
 }

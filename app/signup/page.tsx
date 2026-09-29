@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { UserRole } from '@/types'
+import { UserRole, UserRoles } from '@/types'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -13,14 +13,29 @@ export default function SignupPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
-  const [role, setRole] = useState<UserRole>('designer')
+  const [roles, setRoles] = useState<UserRoles>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const toggleRole = (role: UserRole) => {
+    setRoles(prev => 
+      prev.includes(role)
+        ? prev.filter(r => r !== role)
+        : [...prev, role]
+    )
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+
+    // Require at least one role
+    if (roles.length === 0) {
+      setError('Please select at least one option')
+      setLoading(false)
+      return
+    }
 
     // Sign up with Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -41,7 +56,7 @@ export default function SignupPage() {
         .insert({
           id: authData.user.id,
           email,
-          role,
+          roles,
           display_name: displayName,
         })
 
@@ -71,15 +86,15 @@ export default function SignupPage() {
           )}
 
           <div className="space-y-4">
-            {/* Role selector */}
+            {/* Role selector - checkboxes */}
             <div>
               <label className="block text-sm font-medium mb-2">I want to...</label>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
-                  onClick={() => setRole('designer')}
+                  onClick={() => toggleRole('designer')}
                   className={`p-4 rounded-lg border-2 transition-colors ${
-                    role === 'designer'
+                    roles.includes('designer')
                       ? 'border-primary bg-primary/10'
                       : 'border-surface-light hover:border-gray-600'
                   }`}
@@ -90,9 +105,9 @@ export default function SignupPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setRole('maker')}
+                  onClick={() => toggleRole('maker')}
                   className={`p-4 rounded-lg border-2 transition-colors ${
-                    role === 'maker'
+                    roles.includes('maker')
                       ? 'border-primary bg-primary/10'
                       : 'border-surface-light hover:border-gray-600'
                   }`}
@@ -100,6 +115,19 @@ export default function SignupPage() {
                   <div className="text-2xl mb-1">🖨️</div>
                   <div className="font-semibold">Make</div>
                   <div className="text-xs text-gray-400">Submit bids</div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleRole('explorer')}
+                  className={`p-4 rounded-lg border-2 transition-colors ${
+                    roles.includes('explorer')
+                      ? 'border-primary bg-primary/10'
+                      : 'border-surface-light hover:border-gray-600'
+                  }`}
+                >
+                  <div className="text-2xl mb-1">🔍</div>
+                  <div className="font-semibold">Explore</div>
+                  <div className="text-xs text-gray-400">Just looking</div>
                 </button>
               </div>
             </div>

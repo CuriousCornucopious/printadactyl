@@ -7,7 +7,7 @@
 CREATE TABLE public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('designer', 'maker')),
+  roles TEXT[] NOT NULL DEFAULT ARRAY['explorer']::text[],
   display_name TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -107,11 +107,11 @@ CREATE POLICY "Makers can update their own bids"
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, role, display_name)
+  INSERT INTO public.profiles (id, email, roles, display_name)
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'role', 'designer'),
+    COALESCE(NEW.raw_user_meta_data->>'roles', '{"explorer"}')::text[],
     COALESCE(NEW.raw_user_meta_data->>'display_name', split_part(NEW.email, '@', 1))
   );
   RETURN NEW;

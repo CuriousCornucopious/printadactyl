@@ -51,7 +51,7 @@ export default function PostJobPage() {
       .eq('id', user.id)
       .single()
 
-    if (profile?.role !== 'designer') {
+    if (profile?.roles && !profile.roles.includes('designer')) {
       // Makers can also post jobs, so we allow it
       // But we could show a warning
     }
