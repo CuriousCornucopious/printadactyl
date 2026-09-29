@@ -33,6 +33,30 @@
 | Email routing understood | Specific prefixes go to specific inboxes, others go to catch-all |
 | Marketing tracking realized | Can use different prefixes (sarah@, amanda@, etc.) to track inquiries |
 | Porkbun API keys updated | New working keys saved in TOOLS.md |
+| Multi-role signup added | Designer, Maker, Explorer (select all that apply) |
+| Vercel deploy issue fixed | Site wasn't auto-deploying; used Vercel CLI to force deploy |
+
+### Bug Fix: Multi-Role Signup
+
+**Problem:** Old signup forced users to pick Designer OR Maker (single choice).
+
+**Solution:** Changed to checkboxes allowing multiple selections:
+- 🎨 Design (post jobs)
+- 🖨️ Make (submit bids)  
+- 🔍 Explore (just browsing, undecided)
+
+**Technical changes:**
+- Database: `role TEXT` → `roles TEXT[]` (array)
+- Frontend: Toggle buttons for each role
+- Dashboard: Shows all selected roles
+
+**Note:** Had to run schema migration manually:
+```sql
+ALTER TABLE public.profiles DROP COLUMN IF EXISTS role;
+ALTER TABLE public.profiles ADD COLUMN roles TEXT[] NOT NULL DEFAULT ARRAY['explorer']::text[];
+```
+
+**Also fixed:** Vercel wasn't auto-deploying on git push — used `vercel --prod` CLI to force deploy.
 
 ### Email Strategy Decided
 
@@ -56,6 +80,7 @@
 - ⏳ Testing signup flow (in progress)
 - ✅ **Email working** — Zoho Mail MX records active
 - ✅ **Catch-all enabled** — Marketing tracking ready
+- ✅ **Multi-role signup** — Designer/Maker/Explorer (select all that apply)
 
 ### What I Intend to Do Next
 
