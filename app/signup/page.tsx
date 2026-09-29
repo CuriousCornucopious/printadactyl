@@ -88,47 +88,59 @@ export default function SignupPage() {
           <div className="space-y-4">
             {/* Role selector - checkboxes */}
             <div>
-              <label className="block text-sm font-medium mb-2">I want to...</label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => toggleRole('designer')}
-                  className={`p-4 rounded-lg border-2 transition-colors ${
-                    roles.includes('designer')
-                      ? 'border-primary bg-primary/10'
-                      : 'border-surface-light hover:border-gray-600'
-                  }`}
-                >
-                  <div className="text-2xl mb-1">🎨</div>
-                  <div className="font-semibold">Design</div>
-                  <div className="text-xs text-gray-400">Post jobs</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => toggleRole('maker')}
-                  className={`p-4 rounded-lg border-2 transition-colors ${
-                    roles.includes('maker')
-                      ? 'border-primary bg-primary/10'
-                      : 'border-surface-light hover:border-gray-600'
-                  }`}
-                >
-                  <div className="text-2xl mb-1">🖨️</div>
-                  <div className="font-semibold">Make</div>
-                  <div className="text-xs text-gray-400">Submit bids</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => toggleRole('explorer')}
-                  className={`p-4 rounded-lg border-2 transition-colors ${
-                    roles.includes('explorer')
-                      ? 'border-primary bg-primary/10'
-                      : 'border-surface-light hover:border-gray-600'
-                  }`}
-                >
-                  <div className="text-2xl mb-1">🔍</div>
-                  <div className="font-semibold">Explore</div>
-                  <div className="text-xs text-gray-400">Just looking</div>
-                </button>
+              <label className="block text-sm font-medium mb-2">I want to... (select all that apply)</label>
+              <div className="space-y-3">
+                <label className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                  roles.includes('designer')
+                    ? 'border-primary bg-primary/10'
+                    : 'border-surface-light hover:border-gray-600'
+                }`}>
+                  <input
+                    type="checkbox"
+                    checked={roles.includes('designer')}
+                    onChange={() => toggleRole('designer')}
+                    className="w-5 h-5 mr-3"
+                  />
+                  <span className="text-2xl mr-2">🎨</span>
+                  <div>
+                    <div className="font-semibold">Design</div>
+                    <div className="text-xs text-gray-400">Post jobs and find makers</div>
+                  </div>
+                </label>
+                <label className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                  roles.includes('maker')
+                    ? 'border-primary bg-primary/10'
+                    : 'border-surface-light hover:border-gray-600'
+                }`}>
+                  <input
+                    type="checkbox"
+                    checked={roles.includes('maker')}
+                    onChange={() => toggleRole('maker')}
+                    className="w-5 h-5 mr-3"
+                  />
+                  <span className="text-2xl mr-2">🖨️</span>
+                  <div>
+                    <div className="font-semibold">Make</div>
+                    <div className="text-xs text-gray-400">Submit bids on print jobs</div>
+                  </div>
+                </label>
+                <label className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                  roles.includes('explorer')
+                    ? 'border-primary bg-primary/10'
+                    : 'border-surface-light hover:border-gray-600'
+                }`}>
+                  <input
+                    type="checkbox"
+                    checked={roles.includes('explorer')}
+                    onChange={() => toggleRole('explorer')}
+                    className="w-5 h-5 mr-3"
+                  />
+                  <span className="text-2xl mr-2">🔍</span>
+                  <div>
+                    <div className="font-semibold">Explore</div>
+                    <div className="text-xs text-gray-400">Browse jobs and makers first</div>
+                  </div>
+                </label>
               </div>
             </div>
 
