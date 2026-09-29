@@ -1,6 +1,6 @@
 # Printadactyl: Master Document
 
-**Last Updated:** 2026-09-28
+**Last Updated:** 2026-09-29
 
 ---
 
@@ -19,6 +19,31 @@
 | Domain pointed to Vercel | DNS records updated via Porkbun API |
 | Porkbun API set up | Created keys via PKCE flow, working |
 
+---
+
+## 📝 Session Summary: 2026-09-29
+
+### What Happened Today
+
+| Event | Details |
+|-------|---------|
+| Zoho Mail MX records added | Added mx.zoho.com (10), mx2.zoho.com (20), mx3.zoho.com (50) |
+| DNS propagated | MX records verified working via Zoho dashboard |
+| Catch-all discovered | Enabled in Zoho Control Panel |
+| Email routing understood | Specific prefixes go to specific inboxes, others go to catch-all |
+| Marketing tracking realized | Can use different prefixes (sarah@, amanda@, etc.) to track inquiries |
+| Porkbun API keys updated | New working keys saved in TOOLS.md |
+
+### Email Strategy Decided
+
+| Account | Purpose |
+|---------|--------|
+| hello@printadactyl.com | General contact (used on website) |
+| support@printadactyl.com | Support requests |
+| sarah@printadactyl.com | Marketing tracking (Sarah campaign) |
+| amanda@printadactyl.com | Marketing tracking (Amanda campaign) |
+| [catch-all] | Catches any other prefix, routes to main inbox |
+
 ### Current Status
 
 - ✅ Supabase account + project ready
@@ -29,6 +54,8 @@
 - ✅ Legal pages (Privacy Policy + Terms of Service)
 - ✅ **SITE IS LIVE at http://printadactyl.com**
 - ⏳ Testing signup flow (in progress)
+- ✅ **Email working** — Zoho Mail MX records active
+- ✅ **Catch-all enabled** — Marketing tracking ready
 
 ### What I Intend to Do Next
 
@@ -92,6 +119,7 @@
 | GitHub repo | Sep 2026 | CuriousCornucopious/printadactyl |
 | Vercel connected | Sep 2026 | Auto-deploys from GitHub |
 | Supabase account created | Sep 2026 | Project "CuriousCornucopious's Project" ready |
+| Zoho Mail configured | Sep 2026 | MX records added, catch-all enabled, marketing tracking ready |
 
 ## 💀 Losses (Abandoned/Deprecated)
 
@@ -145,7 +173,7 @@
 | Asset | Status | Details |
 |-------|--------|---------|
 | **Domain** | Active | printadactyl.com (Porkbun, $11.08/yr, renews Sep 2027) |
-| **Email** | Active | amandatedeschi@printadactyl.com (Zoho Mail Free) |
+| **Email** | Active | Zoho Mail — MX records active, catch-all enabled |
 | **Landing Page** | ✅ Built | https://printadactyl.vercel.app (Next.js) |
 | **GitHub** | Active | github.com/CuriousCornucopious/printadactyl |
 | **Vercel** | Connected | Auto-deploys from GitHub |
