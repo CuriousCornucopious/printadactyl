@@ -47,7 +47,7 @@ export default function PostJobPage() {
     // Check if user is a designer
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role')
+      .select('roles')
       .eq('id', user.id)
       .single()
 
