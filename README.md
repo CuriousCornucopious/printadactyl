@@ -58,6 +58,8 @@ ALTER TABLE public.profiles ADD COLUMN roles TEXT[] NOT NULL DEFAULT ARRAY['expl
 
 **Also fixed:** Vercel wasn't auto-deploying on git push — used `vercel --prod` CLI to force deploy.
 
+**2026-09-29 Update:** Changed toggle buttons to actual checkboxes with "select all that apply" label.
+
 ### Email Strategy Decided
 
 | Account | Purpose |
