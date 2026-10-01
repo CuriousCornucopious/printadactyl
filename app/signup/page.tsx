@@ -38,21 +38,10 @@ export default function SignupPage() {
       return
     }
 
-    // Sign up with Supabase Auth. Roles + display name are passed via
-    // options.data so the handle_new_user trigger can read them from
-    // raw_user_meta_data and auto-create the profile row.
-    // Roles is sent as a Postgres array literal (e.g. '{designer,maker}')
-    // so the trigger's `::text[]` cast works cleanly.
-    const rolesLiteral = '{' + roles.join(',') + '}'
+    // Step 1: Create auth user (no metadata — we handle profile manually)
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          roles: rolesLiteral,
-          display_name: displayName,
-        },
-      },
     })
 
     if (authError) {
@@ -61,8 +50,39 @@ export default function SignupPage() {
       return
     }
 
-    // If email confirmation is required, there's no session yet.
-    // Show a "check your email" message instead of redirecting.
+    if (!authData.user) {
+      setError('Signup failed: no user returned from auth')
+      setLoading(false)
+      return
+    }
+
+    // Step 2: Explicitly create profile row in public.profiles.
+    // We do this in code (not via DB trigger) so any failure surfaces
+    // a real SQL error message instead of a generic 'Database error'.
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert({
+        id: authData.user.id,
+        email,
+        roles,
+        display_name: displayName,
+      })
+
+    if (profileError) {
+      // Step 2b: Profile insert failed — clean up the auth user so the
+      // user can retry with the same email without hitting
+      // 'User already registered'.
+      await supabase.auth.admin.deleteUser(authData.user.id).catch(() => {
+        // Best-effort cleanup. If it fails (we don't have admin rights
+        // from the client), at least surface the original error.
+      })
+
+      setError(`Profile creation failed: ${profileError.message} (code: ${profileError.code || 'unknown'})`)
+      setLoading(false)
+      return
+    }
+
+    // Step 3: If email confirmation is required, no session yet.
     if (!authData.session) {
       setSuccess('Account created! Check your email to confirm your address, then sign in.')
       setLoading(false)
