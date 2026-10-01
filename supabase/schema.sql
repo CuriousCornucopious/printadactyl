@@ -102,26 +102,18 @@ CREATE POLICY "Makers can update their own bids"
   USING (auth.uid() = maker_id);
 
 -- ============================================
--- TRIGGER: Auto-create profile on signup
+-- PROFILE CREATION: Handled by frontend (not trigger)
 -- ============================================
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email, roles, display_name)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'roles', '{"explorer"}')::text[],
-    COALESCE(NEW.raw_user_meta_data->>'display_name', split_part(NEW.email, '@', 1))
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Create trigger
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+-- Profile creation happens in code (app/signup/page.tsx) via an explicit
+-- INSERT into public.profiles after auth.signUp() succeeds. This gives us
+-- real error messages in the UI instead of generic "Database error" failures.
+--
+-- The previous handle_new_user trigger was dropped on 2026-10-01 because:
+-- 1. It silently failed on JSON parsing of the roles field
+-- 2. It made debugging signup impossible from the frontend
+-- 3. Errors didn't surface to the user
+--
+-- See CHRONICLE.md Chapter 3 for the full debugging history.
 
 -- ============================================
 -- INDEXES (for better performance)
