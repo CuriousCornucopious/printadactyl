@@ -49,7 +49,7 @@
 | Auth | Supabase Auth | ⚠️ Ready |
 | Frontend | Next.js 14 + Tailwind | ✅ |
 
-**Supabase Project:** `znwjmtvkengxxfagowyv.supabase.co`
+**Supabase Project:** `znjwmtvkengxxfagowyv.supabase.co`
 
 ---
 
