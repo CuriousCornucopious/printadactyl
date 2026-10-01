@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Job, Bid, MaterialType } from '@/types'
+import { Job, Bid, MaterialType, Comment } from '@/types'
 
 const materialLabels: Record<MaterialType, string> = {
   '3d_print': '3D Print',
@@ -31,13 +31,19 @@ export default function JobDetailPage() {
 
   const [job, setJob] = useState<Job | null>(null)
   const [bids, setBids] = useState<Bid[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [isDesigner, setIsDesigner] = useState(false)
 
+  // Comment form
+  const [newComment, setNewComment] = useState('')
+  const [submittingComment, setSubmittingComment] = useState(false)
+
   // Bid form state
   const [showBidForm, setShowBidForm] = useState(false)
   const [bidPrice, setBidPrice] = useState('')
+  const [bidDesignFee, setBidDesignFee] = useState('')
   const [bidTurnaround, setBidTurnaround] = useState('')
   const [bidNotes, setBidNotes] = useState('')
   const [bidPortfolio, setBidPortfolio] = useState('')
@@ -51,8 +57,41 @@ export default function JobDetailPage() {
   useEffect(() => {
     if (job) {
       fetchBids()
+      fetchComments()
     }
   }, [job])
+
+  const fetchComments = async () => {
+    const { data } = await supabase
+      .from('comments')
+      .select('*, user:profiles!user_id(display_name)')
+      .eq('job_id', jobId)
+      .order('created_at', { ascending: true })
+
+    if (data) {
+      setComments(data as Comment[])
+    }
+  }
+
+  const handleSubmitComment = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user || !newComment.trim()) return
+
+    setSubmittingComment(true)
+    const { error } = await supabase
+      .from('comments')
+      .insert({
+        job_id: jobId,
+        user_id: user.id,
+        body: newComment.trim(),
+      })
+
+    if (!error) {
+      setNewComment('')
+      fetchComments()
+    }
+    setSubmittingComment(false)
+  }
 
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -72,17 +111,24 @@ export default function JobDetailPage() {
   }
 
   const fetchJob = async () => {
-    const { data, error } = await supabase
-      .from('jobs')
-      .select('*, designer:profiles!designer_id(*)')
-      .eq('id', jobId)
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*, designer:profiles!designer_id(*)')
+        .eq('id', jobId)
+        .single()
 
-    if (!error && data) {
-      setJob(data as Job)
-      if (user) {
-        setIsDesigner(user.id === data.designer_id)
+      if (error) {
+        console.error('Error fetching job:', error)
+        setJob(null)
+      } else if (data) {
+        setJob(data as Job)
+        if (user) {
+          setIsDesigner(user.id === data.designer_id)
+        }
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -120,6 +166,7 @@ export default function JobDetailPage() {
         job_id: jobId,
         maker_id: user.id,
         price: parseFloat(bidPrice),
+        design_fee: bidDesignFee ? parseFloat(bidDesignFee) : null,
         turnaround_days: parseInt(bidTurnaround),
         notes: bidNotes,
         portfolio_link: bidPortfolio,
@@ -159,10 +206,19 @@ export default function JobDetailPage() {
     fetchBids()
   }
 
-  if (loading || !job) {
+  if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12 text-center">
         <p className="text-gray-400">Loading job...</p>
+      </div>
+    )
+  }
+
+  if (!job) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12 text-center">
+        <p className="text-red-400">Job not found.</p>
+        <Link href="/jobs" className="text-primary hover:underline">← Back to jobs</Link>
       </div>
     )
   }
@@ -187,6 +243,11 @@ export default function JobDetailPage() {
           <span className="bg-surface-light px-3 py-1 rounded-full">
             {materialLabels[job.material_type]}
           </span>
+          {job.event_type && (
+            <span className="bg-surface-light px-3 py-1 rounded-full">
+              Event: {job.event_type}
+            </span>
+          )}
           <span className="bg-surface-light px-3 py-1 rounded-full">
             Qty: {job.quantity}
           </span>
@@ -194,7 +255,7 @@ export default function JobDetailPage() {
             Budget: ${job.budget_min} - ${job.budget_max}
           </span>
           <span className="bg-surface-light px-3 py-1 rounded-full">
-            Deadline: {new Date(job.deadline).toLocaleDateString()}
+            Deadline: {new Date(job.deadline).toLocaleDateString('en-US', { timeZone: 'UTC' })}
           </span>
         </div>
 
@@ -207,6 +268,16 @@ export default function JobDetailPage() {
           <p className="text-sm text-gray-500 mt-6">
             Posted by {job.designer.display_name}
           </p>
+        )}
+
+        {/* Job Type Badge */}
+        {job.job_type === 'full' && (
+          <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500 rounded-lg">
+            <span className="text-yellow-400 font-medium">🎨 Design + Print</span>
+            <span className="text-gray-400 text-sm ml-2">
+              This job needs both design and printing.
+            </span>
+          </div>
         )}
       </div>
 
@@ -232,7 +303,7 @@ export default function JobDetailPage() {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Your Price ($)</label>
+                  <label className="block text-sm font-medium mb-1">Print Price ($)</label>
                   <input
                     type="number"
                     value={bidPrice}
@@ -257,6 +328,27 @@ export default function JobDetailPage() {
                   />
                 </div>
               </div>
+
+              {/* Design Fee - only show for 'full' jobs */}
+              {job.job_type === 'full' && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Design Fee ($) <span className="text-gray-500">(optional)</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={bidDesignFee}
+                    onChange={(e) => setBidDesignFee(e.target.value)}
+                    min="0"
+                    step="0.01"
+                    className="w-full px-4 py-3 bg-surface-light border border-gray-700 rounded-lg focus:outline-none focus:border-primary"
+                    placeholder="0.00"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Leave blank if you don't offer design services.
+                  </p>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium mb-1">Portfolio Link</label>
@@ -300,6 +392,69 @@ export default function JobDetailPage() {
           )}
         </div>
       )}
+
+
+      {/* Comments Section */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">
+          Comments ({comments.length})
+        </h2>
+
+        {/* Comment Form */}
+        {user ? (
+          <form onSubmit={handleSubmitComment} className="mb-6">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Ask a question or share info..."
+              maxLength={2000}
+              className="w-full px-4 py-3 bg-surface border border-surface-light rounded-lg focus:outline-none focus:border-primary mb-2"
+              rows={3}
+            />
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-gray-500">{newComment.length}/2000</span>
+              <button
+                type="submit"
+                disabled={submittingComment || !newComment.trim()}
+                className="px-4 py-2 bg-surface-light text-white rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50"
+              >
+                {submittingComment ? 'Posting...' : 'Post Comment'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="text-gray-400 text-sm mb-6">
+            <Link href="/login" className="text-primary hover:underline">Login</Link> to post a comment.
+          </p>
+        )}
+
+        {/* Comments List */}
+        {comments.length === 0 ? (
+          <p className="text-gray-500">No comments yet.</p>
+        ) : (
+          <div className="space-y-4">
+            {comments.map((comment) => (
+              <div key={comment.id} className="p-4 bg-surface rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-medium text-primary">
+                    {comment.user?.display_name || 'Anonymous'}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(comment.created_at).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      timeZone: 'UTC'
+                    })}
+                  </span>
+                </div>
+                <p className="text-gray-300 whitespace-pre-wrap">{comment.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Bids section */}
       <div>

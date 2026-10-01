@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Header from '../components/Header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,12 +35,8 @@ export default function RootLayout({
                 <a href="/dashboard" className="hover:text-primary transition-colors">
                   Dashboard
                 </a>
-                <a
-                  href="/login"
-                  className="px-4 py-2 bg-primary text-background font-semibold rounded-lg hover:opacity-90 transition-opacity"
-                >
-                  Login
-                </a>
+                {/* Replace static 'Login' with dynamic Header */}
+                <Header />
               </nav>
             </div>
           </header>
@@ -58,3 +55,4 @@ export default function RootLayout({
     </html>
   )
 }
+

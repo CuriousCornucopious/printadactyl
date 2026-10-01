@@ -43,6 +43,7 @@ CREATE TABLE public.jobs (
   budget_max DECIMAL(10,2) NOT NULL,
   design_file_url TEXT,
   status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'bidding_closed', 'in_progress', 'completed', 'cancelled')),
+  event_type TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

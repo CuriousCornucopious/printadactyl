@@ -114,7 +114,7 @@ export default function DashboardPage() {
         </div>
         <button
           onClick={handleLogout}
-          className="text-gray-400 hover:text-white transition-colors"
+          className="text-gray-300 hover:text-white transition-colors"
         >
           Logout
         </button>

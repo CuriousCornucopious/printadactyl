@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { MaterialType } from '@/types'
+import { MaterialType, JobType } from '@/types'
 
 const materialOptions: { value: MaterialType; label: string; icon: string }[] = [
   { value: '3d_print', label: '3D Print', icon: '🧊' },
@@ -27,6 +27,8 @@ export default function PostJobPage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [materialType, setMaterialType] = useState<MaterialType>('3d_print')
+  const [jobType, setJobType] = useState<JobType>('print')
+  const [eventType, setEventType] = useState('')
   const [quantity, setQuantity] = useState('')
   const [deadline, setDeadline] = useState('')
   const [budgetMin, setBudgetMin] = useState('')
@@ -78,11 +80,13 @@ export default function PostJobPage() {
         title,
         description,
         material_type: materialType,
+        job_type: jobType,
         quantity: parseInt(quantity),
         deadline,
         budget_min: parseFloat(budgetMin),
         budget_max: parseFloat(budgetMax),
         status: 'open',
+        event_type: eventType || null,
       })
 
     if (insertError) {
@@ -111,6 +115,43 @@ export default function PostJobPage() {
             {error}
           </div>
         )}
+
+        {/* Job Type */}
+        <div>
+          <label className="block text-sm font-medium mb-3">
+            What do you need? *
+          </label>
+          <div className="grid md:grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setJobType('print')}
+              className={`p-4 rounded-lg border-2 transition-colors text-left ${
+                jobType === 'print'
+                  ? 'border-primary bg-primary/10'
+                  : 'border-surface-light hover:border-gray-600'
+              }`}
+            >
+              <div className="font-medium text-lg">🖨️ I have a design</div>
+              <div className="text-sm text-gray-400 mt-1">
+                I already have design files ready. Just need printing.
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setJobType('full')}
+              className={`p-4 rounded-lg border-2 transition-colors text-left ${
+                jobType === 'full'
+                  ? 'border-primary bg-primary/10'
+                  : 'border-surface-light hover:border-gray-600'
+              }`}
+            >
+              <div className="font-medium text-lg">🎨 I need design + print</div>
+              <div className="text-sm text-gray-400 mt-1">
+                Create the design for me and print it.
+              </div>
+            </button>
+          </div>
+        </div>
 
         {/* Title */}
         <div>
@@ -150,6 +191,26 @@ export default function PostJobPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Event Type (optional) */}
+        <div className="mb-4">
+          <label htmlFor="eventType" className="block text-sm font-medium mb-2">
+            Event Type (optional)
+          </label>
+          <select
+            id="eventType"
+            value={eventType}
+            onChange={(e) => setEventType(e.target.value)}
+            className="w-full px-4 py-3 bg-surface border border-surface-light rounded-lg focus:outline-none focus:border-primary"
+          >
+            <option value="">— Select —</option>
+            <option value="birthday">Birthday</option>
+            <option value="christmas">Christmas</option>
+            <option value="wedding">Wedding</option>
+            <option value="corporate">Corporate</option>
+            <option value="other">Other</option>
+          </select>
         </div>
 
         {/* Quantity & Deadline */}
