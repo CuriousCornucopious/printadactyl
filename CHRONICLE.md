@@ -1188,3 +1188,113 @@ Commit: `579a480`
 *Next: Test login flow, then move to job posting.*
 
 *Last updated: 2026-10-01 07:46 UTC*
+
+---
+
+### 2026-10-01 07:46–08:20 UTC — Smoke Testing + Bug Discovery
+
+After the signup fix, Amanda ran through the full flow. Several bugs surfaced.
+
+---
+
+#### What Amanda Tested
+
+1. **Logged out and back in** ✅ Works
+2. **Posted her first job** ✅ Form worked
+3. **Browsed jobs from "My Bids" tab** ⚠️ Click into a job → "Loading job..." hangs forever
+4. **Looked at the dashboard layout** — Logout button is dark gray, hard to read
+5. **Logged in view** — "Login" button still shows in top nav even when signed in
+6. **Date discrepancy** — Set deadline 12/20/26, displayed as 12/19 in dashboard (timezone bug)
+
+---
+
+#### Bugs Found During Testing
+
+| # | Bug | Root Cause | Where |
+|---|-----|-----------|--------|
+| 1 | Job detail page hangs on "Loading job..." | `fetchJob()` doesn't call `setLoading(false)` after the query returns | `app/jobs/[id]/page.tsx` |
+| 2 | "Login" button shows even when signed in | `app/layout.tsx` hardcodes the link with no auth check | `app/layout.tsx` |
+| 3 | Logout button hard to read | `text-gray-400` on dark background | `app/dashboard/page.tsx` |
+| 4 | Deadline date off by one day | UTC storage vs PDT display | `app/post-job/page.tsx` |
+
+---
+
+#### Amanda's Product Ideas (Captured For Future)
+
+**1. Job form field expansion**
+> "I need more options... materials, event (birthday, xmas, wedding etc) this could change a makers interest or overall interest in bidding a job."
+
+Current fields: title, description, material_type, quantity, budget, deadline
+
+Could add:
+- **Event type** — Birthday, Christmas, wedding, baby shower, corporate, etc.
+- **More material types** — Currently: 3D print, t-shirt, banner, sticker, vinyl, other
+- **Size/dimensions** for banners/stickers
+- **Color count** for shirts/designs
+
+**2. Bidding vs Comments vs Messaging**
+> "Will people only be able to bid? Can they comment, like a thread. Have the ability to comment on the job posting or send a message to the user."
+
+Current state: Bidding only (no comments, no direct messaging)
+
+Open questions:
+- Should makers be able to ask clarifying questions on a job post?
+- Should designers and bidders have a message thread?
+- Or keep it simple: bid is the only interaction until accepted?
+
+**3. "Post a Design" idea (New user type?)**
+> "Should we have a 'Post a Job' 'Browse/Bid Jobs' and 'Post a Design' — for the people that don't know how to officially design and do not have printers."
+
+Current flow:
+- Designers with designs → Post a Job
+- Makers → Browse/Bid Jobs
+
+Proposed expansion:
+- Designers WITH designs, no printers → Post a Job (current)
+- Designers WITHOUT designs, no printers → Post a Design Request
+- Designers WITH designs AND printers → Make? (browse their own bids?)
+- Makers → Browse/Bid Jobs (current)
+
+This would make the platform more inclusive for non-technical users.
+
+---
+
+#### What's Next (Per Amanda's Request)
+
+**Phase 1: Bug fixes (immediate)**
+1. Fix "Loading job..." hang
+2. Fix "Login" button showing when signed in
+3. Make logout button readable
+4. Fix date timezone bug
+
+**Phase 2: Product decision points**
+- Decide on job form field additions (vote: event type yes/no, more materials yes/no)
+- Decide on bidding vs comments vs messaging architecture
+- Decide on "Post a Design" expansion
+
+**Phase 3: Cleanup**
+- Drop the dropped-trigger reference from schema.sql
+- Remove empty test env files
+- Clean up debugging commits
+
+---
+
+#### Final State (2026-10-01 08:20 UTC)
+
+| Component | Status |
+|-----------|--------|
+| Signup | ✅ Working |
+| Login | ✅ Working |
+| Job posting | ✅ Working |
+| Job listing | ✅ Working |
+| Job detail | ❌ Hangs on load (bug #1) |
+| Dashboard | ⚠️ Partially working (logout button hard to read, login button doesn't hide) |
+| Date display | ⚠️ Off by one day (timezone bug) |
+| Comments/messaging | ❌ Not built yet |
+| Event type field | ❌ Not in form |
+
+---
+
+*To be continued...*
+
+*Last updated: 2026-10-01 08:20 UTC*
