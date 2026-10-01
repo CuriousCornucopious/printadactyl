@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [roles, setRoles] = useState<UserRoles>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const toggleRole = (role: UserRole) => {
     setRoles(prev => 
@@ -37,10 +38,21 @@ export default function SignupPage() {
       return
     }
 
-    // Sign up with Supabase Auth
+    // Sign up with Supabase Auth. Roles + display name are passed via
+    // options.data so the handle_new_user trigger can read them from
+    // raw_user_meta_data and auto-create the profile row.
+    // Roles is sent as a Postgres array literal (e.g. '{designer,maker}')
+    // so the trigger's `::text[]` cast works cleanly.
+    const rolesLiteral = '{' + roles.join(',') + '}'
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          roles: rolesLiteral,
+          display_name: displayName,
+        },
+      },
     })
 
     if (authError) {
@@ -49,22 +61,12 @@ export default function SignupPage() {
       return
     }
 
-    // If successful, create profile
-    if (authData.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,
-          email,
-          roles,
-          display_name: displayName,
-        })
-
-      if (profileError) {
-        setError(profileError.message)
-        setLoading(false)
-        return
-      }
+    // If email confirmation is required, there's no session yet.
+    // Show a "check your email" message instead of redirecting.
+    if (!authData.session) {
+      setSuccess('Account created! Check your email to confirm your address, then sign in.')
+      setLoading(false)
+      return
     }
 
     router.push('/dashboard')
@@ -82,6 +84,12 @@ export default function SignupPage() {
           {error && (
             <div className="p-3 bg-red-500/10 border border-red-500 rounded-lg text-red-500 text-sm">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-3 bg-green-500/10 border border-green-500 rounded-lg text-green-400 text-sm">
+              {success}
             </div>
           )}
 
