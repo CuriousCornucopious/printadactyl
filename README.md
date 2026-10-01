@@ -1,6 +1,8 @@
 # Printadactyl: Master Document
 
-**Last Updated:** 2026-09-29
+**Last Updated:** 2026-10-01
+
+> 📖 **For the full story:** See [CHRONICLE.md](./CHRONICLE.md) — a journal of our journey from idea to execution.
 
 ---
 
@@ -60,6 +62,20 @@ ALTER TABLE public.profiles ADD COLUMN roles TEXT[] NOT NULL DEFAULT ARRAY['expl
 
 **2026-09-29 Update:** Changed toggle buttons to actual checkboxes with "select all that apply" label.
 
+### Session Summary: 2026-10-01
+
+| Event | Details |
+|-------|---------|
+| Check-in | Verified live site at printadactyl.com |
+| Signup UI confirmed | "select all that apply" text visible |
+| Database status verified | Tables exist in Supabase, roles column confirmed |
+| Supabase keys confirmed | Already in Vercel env vars |
+| Chronicle created | New CHRONICLE.md tells the full story |
+
+**Current state:** Ready to test signup end-to-end. Database tables exist, connection should work.
+
+**Next goal:** Test actual signup flow → verify user creation in Supabase
+
 ### Email Strategy Decided
 
 | Account | Purpose |
@@ -73,16 +89,16 @@ ALTER TABLE public.profiles ADD COLUMN roles TEXT[] NOT NULL DEFAULT ARRAY['expl
 ### Current Status
 
 - ✅ Supabase account + project ready
-- ✅ Database schema running in Supabase (SQL Editor)
+- ✅ Database schema ready (tables exist)
 - ✅ RLS policies applied
 - ✅ Next.js code compiles and deploys successfully
-- ✅ Supabase API keys added to Vercel
+- ✅ Supabase API keys in Vercel
 - ✅ Legal pages (Privacy Policy + Terms of Service)
-- ✅ **SITE IS LIVE at http://printadactyl.com**
-- ⏳ Testing signup flow (in progress)
+- ✅ **SITE IS LIVE at https://printadactyl.com**
+- 🧪 **Testing signup flow (NOW)**
 - ✅ **Email working** — Zoho Mail MX records active
 - ✅ **Catch-all enabled** — Marketing tracking ready
-- ✅ **Multi-role signup** — Designer/Maker/Explorer (select all that apply)
+- ✅ **Multi-role signup** — Designer/Maker/Explorer (checkboxes, select all that apply)
 
 ### What I Intend to Do Next
 
@@ -201,22 +217,23 @@ ALTER TABLE public.profiles ADD COLUMN roles TEXT[] NOT NULL DEFAULT ARRAY['expl
 |-------|--------|---------|
 | **Domain** | Active | printadactyl.com (Porkbun, $11.08/yr, renews Sep 2027) |
 | **Email** | Active | Zoho Mail — MX records active, catch-all enabled |
-| **Landing Page** | ✅ Built | https://printadactyl.vercel.app (Next.js) |
+| **Landing Page** | ✅ Live | https://printadactyl.com |
 | **GitHub** | Active | github.com/CuriousCornucopious/printadactyl |
 | **Vercel** | Connected | Auto-deploys from GitHub |
 | **Next.js App** | Built | Full app structure complete |
 | **Supabase Client** | Built | Server + browser clients |
 | **All Pages** | Built | Landing, Login, Signup, Jobs, Job Detail, Post Job, Dashboard |
-| **Database Schema** | Ready | `supabase/schema.sql` ready to run |
+| **Database Schema** | Ready | Tables exist in Supabase |
 | **Auth Middleware** | Built | Protects dashboard/post-job routes |
+| **Signup UI** | Working | Checkboxes for Design/Make/Explore |
 
 ### ⚠️ Current Limitations
 
-- ~~Everything is static HTML~~ → Next.js app built
-- ~~No database~~ → ⚠️ Supabase keys obtained, awaiting connection
-- No user accounts → Ready to connect (needs key + schema run)
-- No job posting → Ready, needs Supabase
-- No bidding → Ready, needs Supabase
+- ~~Everything is static HTML~~ → ✅ Next.js app built
+- ~~No database~~ → ✅ Database schema ready (testing now)
+- No user accounts → 🧪 Testing signup (in progress now)
+- No job posting → Ready, needs working auth
+- No bidding → Ready, needs working auth
 - No payments → Coming Week 3 (Stripe Connect)
 
 ---
