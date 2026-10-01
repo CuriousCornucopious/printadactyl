@@ -594,7 +594,7 @@ Created project: "CuriousCornucopious's Project"
 Region: Hopefully near us (Oregon) — we selected what made sense
 
 Got the keys:
-- Project URL: `https://znwjmtvkengxxfagowylv.supabase.co`
+- Project URL: `https://znwjmtvkengxxfagowyv.supabase.co`
 - Anon key: `eyJ...` (saved to .env.keys, not committed to git)
 
 **But here's the catch:** The server I'm running on has network restrictions. It can't connect to Supabase's HTTPS endpoints directly. The SSL handshake fails — blocked by some firewall or network policy.
@@ -718,7 +718,7 @@ But we realize: we never actually ran the database schema. The tables don't exis
 
 I pull up the SQL, prepare it. Amanda navigates to the Supabase SQL Editor:
 
-**https://supabase.com/dashboard/project/znwjmtvkengxxfagowylv/sql**
+**https://supabase.com/dashboard/project/znwjmtvkengxxfagowyv/sql**
 
 She sees... tables already there? The `profiles` table with a `roles` column (array type). This suggests maybe a partial run happened earlier, or Supabase auto-created something.
 
@@ -797,7 +797,7 @@ One step at a time. First: make signup work.
 | Domain | Porkbun — printadactyl.com |
 | Email | Zoho Mail |
 | Hosting | Vercel — printadactyl-5jgjubztc-eva-68f8.vercel.app |
-| Database | Supabase — znwjmtvkengxxfagowylv.supabase.co |
+| Database | Supabase — znwjmtvkengxxfagowyv.supabase.co |
 | Code | GitHub — CuriousCornucopious/printadactyl |
 
 ### The Stack
