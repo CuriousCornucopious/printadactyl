@@ -928,3 +928,263 @@ These questions remain unanswered. Future sessions should address them:
 *To be continued...*
 
 *Last updated: 2026-10-01*
+
+---
+
+## Chapter 3: The Debugging Slog (October 2026)
+
+*Documented: 2026-10-01*  
+*Last updated: 2026-10-01*
+
+---
+
+### 2026-10-01 — The Signup Bug Marathon
+
+This session became an unintended deep-dive into Supabase quirks. This chapter documents exactly what went wrong, why, and how to avoid it in the future.
+
+---
+
+#### The symptoms
+
+1. **"Failed to fetch"** — User sees this error when submitting the signup form
+2. **"Database error saving new user"** — After fixing #1, this error appeared
+3. **Email confirmation needed** — Supabase default behavior blocked immediate login
+
+---
+
+#### Root Cause Analysis
+
+##### Bug #1: Wrong Supabase Project URL
+
+**What happened:**
+- Initial Supabase project was created as a **sandbox** (short-lived, auto-deleted)
+- User then created a **real project** and provided the new URL + anon key
+- The anon key's JWT payload contained a `ref` claim (project ID)
+- I decoded the JWT and extracted the `ref`, assuming it was the real project
+- **Problem:** The decoded `ref` was `znwjmtvkengxxfagowyv` (n-w-j order)
+- The **real** project URL is `znjwmtvkengxxfagowyv` (w-j order) — a **transposition**, not a typo
+- Both URLs returned the same generic "loading" page in the Supabase dashboard, so I couldn't tell them apart visually
+
+**Why it was hard to catch:**
+- `https://supabase.com/dashboard/project/<ref>` returns a generic page for ANY ref
+- The dashboard URL doesn't validate that the project exists
+- `web_fetch` on the actual `<ref>.supabase.co` with `ENOTFOUND` is the only reliable test
+- But my sandbox environment couldn't resolve `*.supabase.co` via curl — only `web_fetch` worked
+
+**How it was finally fixed:**
+- User provided the correct Project URL and anon key directly from Supabase dashboard
+- I used `web_fetch` to verify: `https://znjwmtvkengxxfagowyv.supabase.co/auth/v1/settings` returned `401 No API key found` (which means the project exists and is responding)
+- Updated `.env.local`, `.env.keys`, Vercel env vars, README, and CHRONICLE to use the correct URL
+
+**Lesson learned:**
+- Never trust the JWT `ref` claim alone when a user provides keys
+- Always verify the URL independently: `web_fetch https://<ref>.supabase.co/auth/v1/settings` should return JSON (or 401 about API key), NOT `ENOTFOUND`
+- If the user provides keys, ask for the URL from dashboard Settings → API page
+
+---
+
+##### Bug #2: Email Confirmation Blocked Signup
+
+**What happened:**
+- Supabase Auth has email confirmation **enabled by default**
+- With confirmation on, `signUp()` creates the user but returns **no session**
+- Our code expected a session immediately and redirected to /dashboard
+- Without a session, the user couldn't log in and saw no feedback
+
+**Why it was hard to catch:**
+- The "Failed to fetch" error was masking everything else
+- Once #1 was fixed, we saw "Database error" instead
+
+**How it was fixed:**
+- User manually toggled off "Confirm email" in Supabase dashboard (Authentication → Providers → Email)
+- I couldn't do this — needed dashboard access or service_role key
+- Added code to show "Check your email to confirm" message when no session is returned
+
+**Lesson learned:**
+- Add this to the onboarding checklist: "Turn off email confirmation for development"
+- Or configure custom SMTP (Zoho) so confirmations come from your domain
+
+---
+
+##### Bug #3: "Database error saving new user"
+
+**What happened:**
+- The signup form sends `roles` and `display_name` via Supabase Auth's `options.data`
+- The database has a trigger (`handle_new_user`) that reads `raw_user_meta_data` and inserts into `profiles`
+- The trigger code: `COALESCE(NEW.raw_user_meta_data->>'roles', '{"explorer"}')::text[]`
+- We sent `roles` as a **Postgres array literal** (`'{designer,maker}'`) — wrong format
+- Then tried JSON string (`'["designer","maker"]'`) — still wrong because it was a string, not a JSON-parseable value
+- The trigger's `::text[]` cast failed silently, causing the insert to error
+
+**Why it was hard to catch:**
+- Supabase error messages don't always surface the root cause clearly
+- The "Database error" is generic — doesn't say *which* field or *why*
+- We couldn't see server-side logs from the browser
+
+**How it was almost fixed:**
+- Changed to send `roles` as a JSON string via `JSON.stringify(roles)`
+- Still didn't work — the trigger parsing is fragile
+
+**Lesson learned:**
+- Database triggers are "elegant" but hard to debug when they fail
+- Frontend code should explicitly handle profile creation with explicit error handling
+- If something goes wrong, we want to see the *actual* database error in the UI
+
+---
+
+##### Bug #4: The Supabase Sandbox Trap
+
+**What happened:**
+- User initially gave me a **sandbox** anon key (short-lived, auto-deleted)
+- Then gave me the **real** project key
+- I assumed the first key was the real one and just fixed the URL
+- The sandbox project was deleted, so the URL didn't exist
+- I kept saying "try again" when it was actually my fault
+
+**Why it was hard to catch:**
+- The JWT decoded fine, but the project it pointed to was gone
+- Supabase dashboard URL doesn't distinguish between "project doesn't exist" and "you don't have permission"
+
+**Lesson learned:**
+- When a user says "I gave you a sandbox key first, then a real one," treat all existing keys as SUSPECT
+- Verify independently: try to fetch the project URL and see if it resolves
+
+---
+
+#### What We Tried (In Order)
+
+| Attempt | Fix | Result |
+|---------|-----|--------|
+| 1 | Decode JWT ref, assume it's the project URL | Wrong — sandbox project was deleted |
+| 2 | Fix URL typo (remove stray 'l') | Wrong — was actually w-j transposition |
+| 3 | User turns off email confirmation manually | Worked — but signup still failing |
+| 4 | Send roles as Postgres array literal (`{designer,maker}`) | Failed — trigger expects JSON |
+| 5 | Send roles as JSON string (`["designer","maker"]`) | Failed — trigger parsing issue |
+| 6 | Rewrite signup to use manual profile insertion | **Recommended next step** |
+
+---
+
+#### How to Avoid This in the Future
+
+1. **Ask for the URL directly** — Don't decode JWTs to find the project URL. Ask the user to paste from Settings → API.
+
+2. **Verify independently** — `web_fetch https://<ref>.supabase.co/auth/v1/settings` should return JSON or 401, not ENOTFOUND.
+
+3. **Turn off email confirmation early** — Add to dev setup checklist.
+
+4. **Prefer explicit code over database triggers** — Triggers are invisible to the frontend. If something fails, you can't show the user what went wrong.
+
+5. **Test with fresh data** — Supabase remembers "email already registered" responses. Use unique emails for each test attempt.
+
+6. **Use incognito windows** — Browser cache hides deployed code changes.
+
+---
+
+#### The Cost
+
+- **Time:** ~2 hours of back-and-forth
+- **Deploys:** 5+ redeploys to test each fix
+- **User frustration:** Multiple "try again" messages
+- **Lesson learned:** Elegant solutions (triggers) are only elegant when they work
+
+---
+
+#### Current Status (2026-10-01 07:14 UTC)
+
+- [x] Supabase project URL corrected (`znjwmtvkengxxfagowyv`)
+- [x] Email confirmation disabled
+- [x] Signup page deployed with roles JSON fix
+- [ ] Signup still failing with "Database error saving new user"
+- [ ] **Decision:** Rewrite signup to use manual profile insertion instead of trigger
+
+---
+
+*To be continued...*
+
+*Last updated: 2026-10-01*
+
+---
+
+### 2026-10-01 07:46 UTC — VICTORY: Signup Works
+
+**Status:** ✅ User signup is now functional after a marathon debugging session.
+
+---
+
+#### What Was Wrong (Full Recap)
+
+We encountered **four distinct bugs** stacked on top of each other:
+
+1. **Wrong Supabase project URL** — Sandbox key's JWT `ref` claim pointed to a deleted project. Real project URL had a transposition (w-j order) that took multiple attempts to identify.
+
+2. **Email confirmation was enabled** — Supabase default blocks immediate login, masking whether signup actually worked.
+
+3. **Database trigger `handle_new_user` was failing silently** — The trigger tried to parse `roles` from `raw_user_meta_data` and cast it to `text[]`. Our JSON string format didn't work, but the error surfaced as a generic "Database error saving new user."
+
+4. **Missing INSERT policy on `profiles` table** — Row Level Security had SELECT and UPDATE policies but no INSERT policy, blocking manual profile creation.
+
+---
+
+#### How It Got Fixed
+
+| Fix | Action |
+|-----|--------|
+| URL typo | Updated `.env.local`, `.env.keys`, Vercel env vars, README, CHRONICLE |
+| Email confirmation | User toggled off in Supabase dashboard (Authentication → Providers → Email) |
+| Trigger failure | Dropped trigger (`DROP TRIGGER on_auth_user_created`) and rewrote signup to insert profile manually in code |
+| RLS policy | Added INSERT policy: `CREATE POLICY ... FOR INSERT WITH CHECK (auth.uid() = id)` |
+
+---
+
+#### Final Code Change
+
+The signup page was rewritten to:
+1. Call `auth.signUp({ email, password })` with **no metadata**
+2. Explicitly `INSERT` into `profiles` after auth succeeds
+3. Show the **actual SQL error** if profile insert fails (not generic message)
+4. Auto-cleanup: if profile insert fails, show error so user can retry with same email
+
+Commit: `579a480`
+
+---
+
+#### Time Cost
+
+- ~5 hours of back-and-forth
+- 8+ deploys
+- ~10 git commits
+- Multiple "try again" messages
+
+---
+
+#### Lessons Learned (For Future Projects)
+
+1. **Ask for URLs directly, don't decode JWTs** — User-provided URLs are ground truth.
+2. **Verify project exists independently** — `web_fetch https://<ref>.supabase.co/auth/v1/settings` should return JSON/401, not ENOTFOUND.
+3. **Turn off email confirmation early in dev** — Add to onboarding checklist.
+4. **Prefer explicit code over database triggers** — Triggers are invisible to frontend debugging.
+5. **RLS policies need INSERT, not just SELECT/UPDATE** — Easy to forget when copying policy templates.
+6. **Surface real errors to the UI** — Generic "Database error" is debugging hell.
+7. **Test with fresh emails** — Supabase remembers "already registered" responses.
+8. **Use incognito windows for testing deploys** — Browser cache hides new code.
+
+---
+
+#### Final State (2026-10-01 07:46 UTC)
+
+| Component | Status |
+|-----------|--------|
+| Supabase URL | ✅ Correct (`znjwmtvkengxxfagowyv`) |
+| Email confirmation | ✅ Disabled |
+| Auth signup | ✅ Working |
+| Profile creation | ✅ Working (manual insert in code) |
+| DB trigger | ✅ Dropped |
+| RLS policies | ✅ SELECT, UPDATE, INSERT all in place |
+| Deploy | ✅ Live at printadactyl.com |
+| User signed up successfully | ✅ |
+
+---
+
+*Next: Test login flow, then move to job posting.*
+
+*Last updated: 2026-10-01 07:46 UTC*
