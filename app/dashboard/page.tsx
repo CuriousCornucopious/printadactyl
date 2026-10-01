@@ -108,7 +108,7 @@ export default function DashboardPage() {
           <p className="text-gray-400">
             Welcome back, {profile?.display_name || 'User'}!
             <span className="ml-2 text-sm bg-surface-light px-2 py-1 rounded-full">
-              {profile?.roles?.includes('designer') ? '🎨 ' : ''}{profile?.roles?.includes('maker') ? '🖨️ ' : ''}{profile?.roles?.includes('explorer') ? '🔍' : ''}
+              {profile?.roles?.includes('designer') ? '🎨 ' : ''}{profile?.roles?.includes('maker') ? '🖨️ ' : ''}{profile?.roles?.includes('ideator') ? '💡' : ''}
             </span>
           </p>
         </div>

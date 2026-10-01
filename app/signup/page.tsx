@@ -153,20 +153,20 @@ export default function SignupPage() {
                   </div>
                 </label>
                 <label className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                  roles.includes('explorer')
+                  roles.includes('ideator')
                     ? 'border-primary bg-primary/10'
                     : 'border-surface-light hover:border-gray-600'
                 }`}>
                   <input
                     type="checkbox"
-                    checked={roles.includes('explorer')}
-                    onChange={() => toggleRole('explorer')}
+                    checked={roles.includes('ideator')}
+                    onChange={() => toggleRole('ideator')}
                     className="w-5 h-5 mr-3"
                   />
-                  <span className="text-2xl mr-2">🔍</span>
+                  <span className="text-2xl mr-2">💡</span>
                   <div>
-                    <div className="font-semibold">Explore</div>
-                    <div className="text-xs text-gray-400">Browse jobs and makers first</div>
+                    <div className="font-semibold">Ideate</div>
+                    <div className="text-xs text-gray-400">Brainstorm and post ideas</div>
                   </div>
                 </label>
               </div>
