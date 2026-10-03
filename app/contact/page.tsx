@@ -37,21 +37,6 @@ export default function ContactPage() {
                 <p className="text-gray-400">Join our community Discord</p>
               </div>
             </div>
-
-            <div className="flex items-start gap-4">
-              <div className="text-2xl">🐙</div>
-              <div>
-                <h3 className="font-semibold mb-1">GitHub</h3>
-                <a 
-                  href="https://github.com/CuriousCornucopious/printadactyl" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  github.com/CuriousCornucopious/printadactyl
-                </a>
-              </div>
-            </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-surface-light">
