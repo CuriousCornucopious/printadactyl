@@ -34,7 +34,15 @@ export default function ContactPage() {
               <div className="text-2xl">💬</div>
               <div>
                 <h3 className="font-semibold mb-1">Discord</h3>
-                <p className="text-gray-400">Join our community Discord</p>
+                <p className="text-gray-400">Coming soon! Join our community.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="text-2xl">📱</div>
+              <div>
+                <h3 className="font-semibold mb-1">Follow Us</h3>
+                <p className="text-gray-400">More platforms coming soon!</p>
               </div>
             </div>
           </div>
