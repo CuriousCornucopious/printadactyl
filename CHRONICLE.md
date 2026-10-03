@@ -1295,6 +1295,292 @@ This would make the platform more inclusive for non-technical users.
 
 ---
 
+## Strategic Brainstorming (2026-10-02)
+
+*Documented: 2026-10-02*
+
+---
+
+### Quality Uncertainty — Two-Way Street
+
+The initial Blueprint identified "quality uncertainty" as a designer pain point (designer doesn't know if the maker is reliable). However, the reverse is equally true and underappreciated:
+
+- A maker may **not want to accept an order for 100 custom toys** if they're unsure if the design will "turn out right"
+- They're learning. They may feel more comfortable accepting a job with a smaller ask.
+- This directly impacts how bids are presented and how makers gain experience.
+
+**Strategic Implications:**
+- Review system becomes critical for trust on **both** sides
+- Could implement "test order" or "beginner-friendly job" markers
+- Reputation system needs to value maker feedback equally to designer feedback
+
+---
+
+### Direct Sales: Selling "Made Items" on PDAC
+
+Idea: Printadactyl isn't just a bidding marketplace — **it can also sell directly-made items**.
+
+
+**Example from Amanda:**
+> "I should make some coloring page downloads and list my own signs for sale, duh! But make them dinosaur signs."
+
+**Strategic Implications:**
+- **Immediate inventory:** Seeds the marketplace with content, fights the chicken-and-egg problem
+- **Brand showcase:** Dinosaur-themed items make it on-brand and fun
+- **Early revenue:** Direct sales can bootstrap the platform before commission revenue kicks in
+- **Execution:** Could be a "Shop" or "Inventory" tab, separate from the job bidding marketplace. Could even be "PDAC Originals"
+
+---
+
+### Future Reach — Inspirational Verticals
+
+Beyond typical consumer goods (shirts, stickers, 3D prints), potential expansion areas:
+
+
+| Vertical | Description | Considerations |
+|----------|-------------|----------------|
+| **Aging Automobile Parts** | Custom fabrication for classic/rare cars | Niche but passionate community |
+| **Accessible Mods** | Wheelchair modifications, prosthetics | Socially impactful, requires precision/quality |
+| **Open Source Materials** | Community-driven design sharing | Fosters trust and differentiation |
+
+These positions Printadactyl as a **platform for custom fabrication and problem-solving**, not just consumer goods.
+
+
+---
+
+### Education, Workshops & Grants
+
+Ecosystem-building ideas:
+
+| Concept | Description | Execution |
+|---------|-------------|----------|
+| **Online Workshops** | Teaching users how to design, use printers, run a print business | Scalable, can be paid or free |
+| **Local Workshops** | If user base grows organically in regions, foster in-person communities | Depends on organic regional growth |
+| **Courses** | More structured teaching jobs — "design for beginners", "sublimation 101" | Integrates with workshops |
+| **Sponsorships/Scholarships/Grants** | Support new designers or makers, lower barriers to entry | Partnership opportunities, grant funding |
+
+**Strategic Implications:**
+- Transforms PDAC from **transactional marketplace** to **community hub**
+- Long-term differentiator — competitors are just transaction platforms
+- Could generate revenue through course fees, sponsorships, or simply increased platform engagement
+
+
+---
+
+### Takeaways from This Session
+
+1. **Quality uncertainty is bidirectional** — platform design must account for maker risk tolerance
+2. **Direct sales** are the most immediately actionable idea — seeds marketplace + brand building
+3. **Community/Education** is the biggest long-term differentiator — think beyond transactions
+4. **Specialized verticals** (auto, accessibility) are aspirational but differentiation opportunities
+
+---
+
 *To be continued...*
 
-*Last updated: 2026-10-01 08:20 UTC*
+
+*Last updated: 2026-10-02*
+
+
+---
+
+## Second Brainstorming Session — Profiles, Shops & AI Sketch (2026-10-02)
+
+*Documented: 2026-10-02*
+
+---
+
+### Amanda's Role in PDAC
+
+Amanda's vision for her own role:
+- **Ideal position:** Owner, marketer, operator — but definitely also a user
+- **Maker philosophy:** Wants to make *what she wants*, not what the platform dictates
+- **Implication:** Platform should support the "passionate hobbyist maker" persona, not just the "compete-on-price-and-speed" commercial print shop persona
+
+---
+
+### Ideator Role Clarified
+
+The `ideator` role (added in commit `4706f59`, replacing `explorer`) is now better defined:
+- An ideator knows they need an object because they have a problem, but doesn't know how to design it
+- Can articulate a need, maybe draw a rough sketch, but lacks technical design skills
+- The `job_type='full'` field is a partial solution — needs more support
+- **Implication:** This role is underserved and could be a real wedge into the market if supported better
+
+---
+
+### AI Sketch-to-Design Feature (V2/V3)
+
+**Concept:** Ideator sketches rough idea → AI generates refined concepts → ideator picks favorite → uses as basis for job post
+
+**V1 status:** Deferred. Amanda said "do not be hasty" — correctly identified that this is too detailed for first launch.
+
+**Why deferred:**
+- **Technical complexity:** Requires AI API integration, custom UX for sketching, image generation handling, integration into job posting flow
+- **User experience:** The UX for sketching, getting AI interpretations, and refining them into a job spec would be complex to get right
+- **Cost:** AI API calls often incur costs per generation
+- **Development time:** Would consume significant resources needed for core marketplace functionality
+
+**V2/V3 vision — "Ideator Tools" section:**
+- Ideator draws rough sketch on canvas
+- Writes description (e.g., "a cute dinosaur holding a sign that says 'Rawr!'")
+- Selects materials/style preferences
+- AI generates several concept images
+- Ideator selects favorites, refines, uses as basis for job post
+- Job clearly indicates it started from an AI concept; generated images attached
+
+**Recommendation:** V1 focuses on core marketplace mechanics. AI sketch feature is a powerful differentiator for V2/V3.
+
+---
+
+### Shop vs. Showcase — The Etsy Pain Point
+
+**The friction Amanda identified:**
+- Etsy limits images outside of listings
+- No real portfolio/showcase capability for makers
+- This is a real differentiator opportunity for PDAC
+
+**Two modes concept:**
+
+| Mode | Purpose | Engagement |
+|------|---------|------------|
+| **Shop** | Active commerce — items with prices, buy buttons | High (generates sales) |
+| **Showcase** | Portfolio only — examples, past work, inspiration | Low (passive retention) |
+
+**Why both modes matter:**
+- Without showcase: makers lose a reason to stay beyond active commerce
+- Showcase becomes the **differentiation that gets makers to stay**
+- Balances active engagement with passive retention
+
+---
+
+### Showcase Mode Details (Final Design)
+
+**Filtering:**
+- Search/profile browse should have a "Showcase only" toggle/switch
+- When filtered, becomes an **inspiration-only board**
+
+**Display rules in showcase mode:**
+- Images only
+- Maker name (clickable, for credit)
+- No pricing, no shop codes, no shop names
+
+**Maker Profile Page (clickable name lands here):**
+- Bio
+- Full showcase gallery
+- Contact info
+- **Required buttons:**
+  - **Share My Idea** — primary action for ideators/designers visiting the profile
+  - **View full shop** — escapable option (viewer's choice, not forced)
+  - **View similar** — tag-based grouping (e.g., "show me other dinosaur signs")
+
+**Profile flow:**
+1. Viewer browses showcase-only mode (inspiration board)
+2. Sees item they like, clicks maker name
+3. Lands on full maker profile with bio, gallery, contact
+4. Two paths: **Share My Idea** (creates inquiry/job draft) or **View full shop** (sees commerce items)
+
+---
+
+### "Share My Idea" Feature
+
+**Concept:** Non-bid inquiry mechanism on maker profiles
+
+**Flow:**
+1. Ideator/designer browses showcases
+2. Finds maker they like, clicks name → lands on profile
+3. Clicks **Share My Idea**
+4. Sends rough concept/idea directly to that maker (not a formal job post)
+5. Maker receives notification, views idea
+6. Maker can: **bid on it** (turns into formal job) OR **decline/not respond**
+
+**Why this matters:**
+- Creates personal connection before commerce
+- Lower friction than posting a public job
+- Builds maker engagement (they're being sought out, not just receiving bids)
+- Supports the ideator who has a problem but no formal spec yet
+
+---
+
+### Monetization Strategy (V1)
+
+**Commission-based only for V1:**
+- **Standard rate: 15%** on completed jobs
+- Free basic profiles for all makers
+- Free "Showcase" section (passive retention, brand building)
+- Direct "Shop" sales: commission-based like jobs (simplest model)
+- **No upfront fees, no subscriptions in V1** — let makers experience value first
+
+**Why commission-first:**
+- Lowest barrier to entry for makers
+- Aligns platform success with maker success
+- Doesn't require complex subscription/payment infrastructure upfront
+- Easier to explain to new users
+
+---
+
+### Accessibility Mods — Values-Driven
+
+- Amanda didn't come from market research — it's values-driven ("I'd love to help people")
+- This means when accessibility features arrive, they'll be authentic, not strategic
+- **Architectural consideration:** Could add structured spec fields to jobs now (dimensions, weight capacity, materials) that work fine for shirts but also serve accessibility mods later
+- **When:** Later phase, but with forethought
+
+---
+
+### Engagement vs. Retention Balance
+
+Amanda's concern: "Don't want profiles/showcases that aren't generating engagement."
+
+**Resolution:** Showcase mode *is* the engagement — it's inspiration browsing for ideators. As long as showcases are actively browsable and "Share My Idea" creates connections, they're generating engagement, not just sitting dormant.
+
+**Key:** Showcase must be discoverable and filterable, not buried.
+
+---
+
+### Active vs. Deferred Features
+
+**V1 (Current focus):**
+- ✅ Core marketplace mechanics (jobs, bids, profiles)
+- ⏳ Shop + Showcase dual mode (basic version)
+- ⏳ "Share My Idea" button on profiles
+- ⏳ Maker profile pages with bio + showcase
+- ⏳ Commission-based monetization only
+
+**V2/V3 (Deferred):**
+- AI sketch-to-design for ideators
+- Workshops/courses
+- Grants/sponsorships
+- Accessibility vertical features
+- Specialized search by tags
+
+---
+
+## Summary of Strategic Direction (as of 2026-10-02)
+
+Printadactyl is positioned to be:
+1. **A two-sided bidding marketplace** for custom printing (core)
+2. **With a maker retention layer** via Shop + Showcase dual mode
+3. **And a low-friction ideator entry path** via "Share My Idea" + future AI sketch tools
+4. **Differentiated from Etsy** by maker portfolios/showcases that don't limit imagery
+5. **Monetized via commission**, not upfront fees
+6. **Values-driven**, with accessibility as authentic long-term aspiration
+
+The "Airbnb of printing" vision holds — adding a maker retention layer and ideator-friendly features makes it more than just a transaction platform.
+
+### October 3, 2026 — Mossy Hill WiFi Bridge Complete ✅
+
+The PowerBeam M2 wireless bridge between Blue House and Mossy Hill is fully operational.
+
+**What was done:**
+- Two PowerBeam M2 units configured (AP mode at Blue House, Station mode at Mossy Hill)
+- TP-Link BE3600 WiFi 7 router added at Mossy Hill (configured in AP mode)
+- Network SSID "BHAP" broadcasting from Blue House
+- Full internet connectivity now available at Mossy Hill
+
+**Files updated:**
+- `memory/powerbeam-m2-bridge.md` — Cleaned up with dates + config summary
+
+---
+
+*Last updated: 2026-10-03*
