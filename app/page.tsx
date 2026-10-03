@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import Stats from '@/components/Stats'
 
 export const metadata: Metadata = {
   title: 'Printadactyl - Your ideas, printed.',
@@ -50,20 +51,7 @@ export default function Home() {
       {/* Stats */}
       <section className="py-12 border-y border-surface">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-primary">500+</div>
-              <div className="text-gray-400">Jobs Posted</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary">200+</div>
-              <div className="text-gray-400">Active Makers</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary">$50K+</div>
-              <div className="text-gray-400">Printed Value</div>
-            </div>
-          </div>
+          <Stats />
         </div>
       </section>
 

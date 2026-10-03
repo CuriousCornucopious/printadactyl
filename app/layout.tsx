@@ -25,19 +25,7 @@ export default function RootLayout({
               <a href="/" className="text-2xl font-bold text-primary">
                 🦕 Printadactyl
               </a>
-              <nav className="flex items-center gap-6">
-                <a href="/jobs" className="hover:text-primary transition-colors">
-                  Browse Jobs
-                </a>
-                <a href="/post-job" className="hover:text-primary transition-colors">
-                  Post a Job
-                </a>
-                <a href="/dashboard" className="hover:text-primary transition-colors">
-                  Dashboard
-                </a>
-                {/* Replace static 'Login' with dynamic Header */}
-                <Header />
-              </nav>
+              <Header />
             </div>
           </header>
 
