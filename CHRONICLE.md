@@ -1584,3 +1584,101 @@ The PowerBeam M2 wireless bridge between Blue House and Mossy Hill is fully oper
 ---
 
 *Last updated: 2026-10-03*
+
+### October 3, 2026 — Pre-Festival Updates
+
+**Arts festival launch prep — multiple fixes deployed:**
+
+**1. Forgot Password Flow**
+- Added "Forgot password?" link to login page
+- Created `/forgot-password` page with Supabase email reset
+- Created `/reset-password` page for password update
+- Fixed Site URL in Supabase (was localhost:3000 → printadactyl.com)
+
+**2. Contact Page**
+- Created `/contact` page (was 404)
+- Added email: hello@printadactyl.com
+- Added "Coming soon" notes for Discord and other platforms
+- Removed GitHub link (not for public display)
+
+**3. Dynamic Stats**
+- Replaced hardcoded fake numbers with real-time DB queries
+- Stats now show: Jobs Posted, Active Designers, Active Makers
+- Queries `jobs` table count, `profiles` table with role filtering
+- Removed "Printed Value" (showed $0, too负面)
+
+**4. Header/Footer Cleanup**
+- Removed duplicate navigation links from layout.tsx
+- Header component now handles all nav (Browse Jobs, Post a Job, Dashboard, Login/Logout)
+- Clean, non-redundant header
+
+**Files changed:**
+- `app/login/page.tsx` — Added forgot password link
+- `app/forgot-password/page.tsx` — NEW
+- `app/reset-password/page.tsx` — NEW
+- `app/contact/page.tsx` — NEW
+- `components/Stats.tsx` — NEW
+- `app/page.tsx` — Replaced static stats with dynamic component
+- `app/layout.tsx` — Removed duplicate nav links
+
+**Technical notes:**
+- Supabase Site URL must be set to `https://printadactyl.com` for password reset emails to work
+- Use `npx vercel --prod --force` for deployments (auto-deploy on git push not catching changes reliably)
+
+---
+
+### October 3, 2026 — Comments Table + Pre-Festival Review
+
+**Comments system added + RLS security audit**
+
+**Comments table:**
+- Created `public.comments` table (id, job_id, user_id, body, created_at)
+- Any authenticated user can post on any job
+- Users can edit/delete their own comments
+- Public SELECT (all comments visible on job detail page)
+
+**RLS security audit finding:**
+- UPDATE was wide-open (no RLS policy → any user could edit any comment)
+- DELETE policy existed (author-only) — already correct
+- **Fix applied:** Added `CREATE POLICY "Users can update their own comments"` (auth.uid() = user_id)
+- Schema synced to `supabase/schema.sql` for reproducibility
+
+**Section A — Core Functionality Review (A1-A7):**
+
+| # | Question | Status |
+|---|----------|--------|
+| A1 | Signup persists | ✅ Verified (1 profile in DB) |
+| A2 | Job posting saves | ✅ Verified (1 job in DB) |
+| A3 | Bid submission | ✅ Code + RLS secure |
+| A4 | "full" job type | ⚠️ Field exists, behavior unverified |
+| A5 | Job detail page | ⚠️ Code fixed locally, deployed may be outdated |
+| A6 | Header Login/Logout | ⚠️ Visual inconsistency (logout text hard to read) |
+| A7 | Settings update | ⚠️ Code exists, needs live test |
+
+**Section Z — Onboarding & Empty States (brainstormed, not built):**
+
+- **Z1** — Dashboard empty states with profile completion banner
+- **Z2** — Jobs with no bids → CTA card + login prompt
+- **Z3** — Maker profile nudges with completion status bar
+- **Z4** — Empty jobs list with sleeping dino SVG
+- **Z5** — Optional role selection + welcome modal + onboarding checklist
+- **Z6** — Share job button with `?ref=user_id` referral tracking
+
+**Section B — Missing Features (brainstormed, not built):**
+
+- **B1 — File upload** — Build ASAP. Supabase Storage bucket, file types (STL, OBJ, PNG, PDF), any signed-up user can upload. Size limits ~25-50MB.
+- **B2 — Direct messaging** — Build. One conversation thread per job. Initial message from bid notes. Real-time + email notifications. ~5 hours effort.
+- **B3 — Email notifications** — Build. Welcome email via Zoho SMTP. Bid/message/comment notifications tied to B2.
+- **B4 — Stripe Connect** — Account setup needed (slow verification process). Don't wait — start now for festival readiness.
+- **B5 — Maker profiles** — Build. Add bio, avatar (upload to Storage), portfolio_url to profiles table. Custom portfolio_link per bid remains.
+
+**Priority for festival launch:**
+1. 🔴 B1 File upload
+2. 🔴 B4 Stripe account creation
+3. 🟡 B2 Messaging
+4. 🟡 B3 Email notifications
+5. 🟡 B5 Maker profiles
+
+---
+
+*Last updated: 2026-10-03 16:30 UTC*

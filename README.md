@@ -1,6 +1,6 @@
 # Printadactyl — Current State
 
-**Last Updated:** 2026-10-01 08:20 UTC
+**Last Updated:** 2026-10-03 16:30 UTC
 
 > 📖 **For the full story:** See [CHRONICLE.md](./CHRONICLE.md) — the complete journal of our journey.
 
@@ -17,17 +17,18 @@
 | Asset | Status | Details |
 |-------|--------|---------|
 | Domain | ✅ Active | printadactyl.com (Porkbun, $11.08/yr, renews Sep 2027) |
-| Email | ✅ Active | Zoho Mail — MX records active, catch-all enabled |
-| Landing Page | ✅ Live | https://printadactyl.com |
+| Email | ✅ Active | Zoho Mail — hello@printadactyl.com |
+| Landing Page | ✅ Live | https://printadactyl.com with dynamic stats |
 | GitHub | ✅ Active | github.com/CuriousCornucopious/printadactyl |
 | Vercel | ✅ Connected | Auto-deploys from GitHub |
-| Next.js App | ✅ Built | 7 pages complete |
-| Supabase | ✅ Connected | Database schema ready, keys in Vercel |
-| Signup | ✅ Working | End-to-end signup confirmed 2026-10-01 |
-| Login | ✅ Working | Confirmed during testing |
-| Job posting | ✅ Working | First job posted by Amanda |
-| Job browsing | ⚠️ Partial | Lists jobs but detail page hangs on "Loading job..." |
-| Dashboard | ✅ Working | Profile, logout, tabs (My Jobs / My Bids) |
+| Next.js App | ✅ Built | 13+ pages |
+| Supabase | ✅ Connected | Database, Auth working |
+| Signup/Login | ✅ Working | With password reset flow |
+| Job posting | ✅ Working | Designers can post jobs |
+| Job browsing | ✅ Working | Jobs list loads |
+| Dashboard | ✅ Working | Profile, logout |
+| Contact Page | ✅ NEW | Replaced 404 |
+| Forgot Password | ✅ NEW | Email-based reset |
 
 ---
 
@@ -61,13 +62,19 @@
 
 | Page | Route | Status |
 |------|-------|--------|
-| Landing | `/` | ✅ |
+| Landing | `/` | ✅ Dynamic stats |
 | Jobs | `/jobs` | ✅ Lists jobs |
 | Job Detail | `/jobs/[id]` | ⚠️ Hangs on load |
 | Post Job | `/post-job` | ✅ Form works |
 | Dashboard | `/dashboard` | ✅ |
-| Login | `/login` | ✅ |
+| Login | `/login` | ✅ + Forgot password link |
 | Signup | `/signup` | ✅ |
+| Forgot Password | `/forgot-password` | ✅ NEW |
+| Reset Password | `/reset-password` | ✅ NEW |
+| Contact | `/contact` | ✅ NEW (was 404) |
+| Settings | `/settings` | ✅ |
+| Privacy | `/privacy` | ✅ |
+| Terms | `/terms` | ✅ |
 
 ---
 
@@ -76,45 +83,38 @@
 - `profiles` — User profiles (id, email, roles[], display_name, created_at)
 - `jobs` — Print jobs (title, description, material_type, quantity, deadline, budget, status)
 - `bids` — Maker bids (price, turnaround_days, notes, portfolio_link, status)
+- `comments` — Job comments (id, job_id, user_id, body, created_at) — NEW 2026-10-03
 
 **RLS Policies:**
 - `profiles` — SELECT, UPDATE, INSERT ✅
 - `jobs`, `bids` — Standard CRUD policies
+- `comments` — Public SELECT, author-only UPDATE/DELETE ✅
 
 ---
 
-## 💡 Product Ideas (From Amanda's Testing Feedback — 2026-10-01)
+## 🚧 Known Bugs (Found 2026-10-01 During Testing)
 
-### Job posting form fields
-Currently has: title, description, material_type, quantity, budget, deadline
-
-**Amanda's thoughts:** Could use more options for richer filtering:
-- **Event type** — Birthday, Christmas, wedding, etc. (could drive maker interest)
-- **More material options** — currently: 3D print, t-shirt, banner, sticker, vinyl, other
-
-### Bidding vs Comments vs Messaging
-**Amanda's question:** Can people comment on a job post like a thread, send messages to the user, or only bid?
-
-**Current state:** Bidding only. No comments, no direct messaging yet.
-
-### "Post a Design" idea
-**Amanda's proposal:** For people who don't know how to design and don't have printers — could there be a "Post a Design" option for designers without printers, plus the existing "Post a Job" (looking for someone to do the whole thing) and "Browse/Bid Jobs" (makers)?
-
-This would split the flow into:
-- **Designers** with finished designs → Post a Job (looking for printers)
-- **Designers** without finished designs → Post a Design Request (looking for designer + printer)
-- **Makers** → Browse/Bid Jobs
+| Bug | Location | Status |
+|-----|----------|--------|
+| "Loading job..." hangs forever | `app/jobs/[id]/page.tsx` — `setLoading(false)` in finally block ✅ (code fixed, deploy pending) | Fixed locally |
+| "Login" button shows even when logged in | `app/layout.tsx` — hardcoded link, no auth check | Open |
+| Logout button hard to read (dark gray on dark bg) | `app/dashboard/page.tsx` — `text-gray-400` | Open |
+| Date off by one day (timezone issue) | `app/post-job/page.tsx` — UTC vs PDT | Open |
 
 ---
 
-## 🔜 Next Action
+## 🔜 Planned Features (Pre-Festival Priority)
 
-**Fix the 4 known bugs:**
+| # | Feature | Priority | Status |
+|---|---------|----------|--------|
+| B1 | File upload (STL, OBJ, PNG, PDF) | 🔴 High | Not started — Supabase Storage bucket needed |
+| B4 | Stripe Connect account | 🔴 High | Not started — Amanda creating account |
+| B2 | Direct messaging | 🟡 Medium | Brainstormed — one thread per job, real-time + email |
+| B3 | Email notifications (welcome + events) | 🟡 Medium | Brainstormed — Zoho SMTP for welcome |
+| B5 | Maker profiles (bio, avatar, portfolio) | 🟡 Medium | Brainstormed — fields decided |
 
-1. `app/jobs/[id]/page.tsx` — Add `setLoading(false)` after fetchJob query
-2. `app/layout.tsx` — Add auth check, show "Logout" instead of "Login" when signed in
-3. `app/dashboard/page.tsx` — Change logout button color (e.g., `text-gray-300` or `text-white`)
-4. `app/post-job/page.tsx` — Convert deadline dates to user's timezone
+**Section Z (Onboarding) — also planned but lower priority:**
+- Profile completion banners, CTA cards on empty bids, welcome modal, share button with referral tracking.
 
 ---
 
@@ -165,13 +165,21 @@ This would split the flow into:
 - [x] Test signup end-to-end
 - [x] Verify user appears in Supabase
 - [x] Test login flow
-- [ ] Fix 4 known bugs
-- [ ] Seed 5 fake jobs
-- [ ] Get first real users
-- [ ] Decide on job form field additions (event type, more materials)
-- [ ] Decide on bidding vs comments vs messaging architecture
-- [ ] Add "Post a Design" flow?
-- [ ] Add Stripe Connect (Phase 2)
+- [x] Comments table with secure RLS
+- [x] Forgot password flow
+- [x] Dynamic stats on landing
+- [x] Section A review (A1-A7)
+- [x] Section B brainstorm (all 5 features)
+- [x] Section Z brainstorm (onboarding plan)
+- [ ] Deploy A5 job detail fix to Vercel
+- [ ] Fix A6 header login/logout inconsistency
+- [ ] A7 live test settings save
+- [ ] B1: Supabase Storage bucket + upload UI
+- [ ] B2: Messages table + thread UI + real-time
+- [ ] B3: Welcome email via Zoho SMTP
+- [ ] B4: Stripe account setup
+- [ ] B5: Add bio/avatar/portfolio to profiles
+- [ ] Section Z implementation (post-B)
 
 ---
 

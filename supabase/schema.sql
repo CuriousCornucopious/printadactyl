@@ -117,6 +117,42 @@ CREATE POLICY "Makers can update their own bids"
 -- See CHRONICLE.md Chapter 3 for the full debugging history.
 
 -- ============================================
+-- COMMENTS TABLE
+-- ============================================
+-- Added directly in Supabase dashboard 2026-10-03 (not via this schema file).
+-- Synced here after RLS security audit revealed UPDATE/DELETE were wide-open.
+--
+-- Columns: id, job_id, user_id, body, created_at
+
+CREATE TABLE public.comments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  job_id UUID NOT NULL REFERENCES public.jobs(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  body TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for comments
+CREATE POLICY "Anyone can view comments" 
+  ON public.comments FOR SELECT 
+  USING (true);
+
+CREATE POLICY "Authenticated users can create comments" 
+  ON public.comments FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own comments" 
+  ON public.comments FOR UPDATE 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own comments" 
+  ON public.comments FOR DELETE 
+  USING (auth.uid() = user_id);
+
+-- ============================================
 -- INDEXES (for better performance)
 -- ============================================
 CREATE INDEX idx_jobs_designer ON public.jobs(designer_id);
@@ -124,3 +160,6 @@ CREATE INDEX idx_jobs_status ON public.jobs(status);
 CREATE INDEX idx_jobs_created ON public.jobs(created_at DESC);
 CREATE INDEX idx_bids_job ON public.bids(job_id);
 CREATE INDEX idx_bids_maker ON public.bids(maker_id);
+CREATE INDEX idx_comments_job ON public.comments(job_id);
+CREATE INDEX idx_comments_user ON public.comments(user_id);
+CREATE INDEX idx_comments_created ON public.comments(created_at DESC);
