@@ -1682,3 +1682,87 @@ The PowerBeam M2 wireless bridge between Blue House and Mossy Hill is fully oper
 ---
 
 *Last updated: 2026-10-03 16:30 UTC*
+
+## Pre-Festival Brainstorm Sections C, D, F (2026-10-03/04)
+
+### Section C: Broken Links & Navigation
+- **C1:** Contact page 404 confirmed by user. Awaiting external test confirmation from my side.
+- **C2:** Other broken routes noted as requiring official test later.
+- **C3:** Login/Logout UI — mutually exclusive display confirmed. Buttons top-right, adjacent to Dashboard when logged in. Logout button styled green/dark to match Login (not gray-on-dark).
+
+### Section D: Trust & Social Proof
+
+**D2 — Reviews:**
+- Dual auto-flag triggers: 2/5 negative reviews OR 2 consecutive negative reviews.
+- Bidirectional reviews displayed on job pages and user profiles.
+- Edit window: 30 days, 2 edits max, "edited" badge visible, original hidden.
+- Character limit: 500 characters.
+- Reply/Report features included; Amanda moderates reports.
+- No option to hide reviews; all reviews public.
+- Security: Input sanitization, RLS, profanity filter, no URLs in initial pass.
+- Reviewers: Designer↔Maker, Ideator↔Maker (all transactional parties).
+
+**D3 — Portfolios:**
+- Photo uploads concurrent with other upload features (B1).
+- Profile sections: Designs, Makes, Requests (collapsible, role-relevant).
+- 6 photos total for free users (1 reserved for avatar).
+- 3 photos visible to logged-out guests (of the 6).
+- Individual listings/jobs can include additional photos beyond the 6.
+- Showcase mode = public-facing mode (logged-out); same mode, different audience.
+
+**D4 — Trust Markers (Prioritized):**
+1. Stripe Connect KYC — High
+2. Average rating + count — High
+3. Account age — High
+4. Maker portfolio with photo uploads — High
+5. Completed jobs count — Medium
+6. Email verified — Medium
+7. Profile completion % — Low
+- Watch-out flag: REMOVED per user direction.
+
+**Stripe Integration Timing:**
+- Recommended to implement AFTER core features (reviews, navigation, uploads) are stable.
+- Stripe verification (SSN/business info) is the slow part — start account setup ASAP.
+
+### Section F: User Onboarding
+
+**F1 — Signup Flow:**
+- New users land on Dashboard with Welcome tour/modal.
+- Not built yet, only planned.
+- Welcome tour = welcome banner = welcome modal = video tour (all the same thing).
+
+**F2 — Public Job Browsing:**
+- `/jobs` accessible logged-out.
+- Limited public view: no names, no costs/bids, no comments.
+- Goal: drive signups via curiosity/engagement.
+- "Tease" model — show enough to entice, hide enough to require signup.
+
+**F3 — Logged-Out `/post-job`:**
+- Redirect to login/signup.
+- Modal or banner: "Sign up to view jobs and bid" / "Sign up to view maker portfolio".
+- Spam prevention: unverified emails already a risk; logged-out posting blocked.
+
+**F4 — Public Maker Profiles:**
+- Showcase mode = public-facing mode for logged-out users.
+- Limited: 3 photos max for guests (of 6 total).
+- Logged-in users see toggleable views: Showcase / Shop / Made (w/ reviews) / All.
+- Same portfolio layout, viewer controls visibility depth.
+- Always prompted to sign up to see more, bid, view portfolios.
+
+**F5 — Roles:**
+- Currently: metadata only, not acted on by UI.
+- Future: profiles sort/categorize by role (makes, designs, purchases, reviews).
+- All options available to all users — no capability restriction.
+- Lead-cater on signup: guide, don't restrict (toast notifications for soft nudges).
+- All settings changeable later.
+
+### Cross-Section Decisions
+- Welcome tour/modal confirmed as single feature (Z5 + F1 alignment).
+- Showcase mode = public-facing AND retention mode — same name, viewer controls depth.
+- All section decisions to be cross-checked at Z for consistency.
+
+### Next Steps
+- Sections A, B, C, D, F captured.
+- Section E pending.
+- Sections G–Z remaining.
+- Final comparison pass at Z completion.
