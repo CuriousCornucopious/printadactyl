@@ -1766,3 +1766,19 @@ The PowerBeam M2 wireless bridge between Blue House and Mossy Hill is fully oper
 - Section E pending.
 - Sections G–Z remaining.
 - Final comparison pass at Z completion.
+
+### Pre-Festival Brainstorm Sections G, I, J (2026-10-04 — partial, in progress)
+
+**Section J — Deferred Features (partial):**
+- J2: Shop vs Showcase — CONFIRMED unified "Showcase mode" (same name for public-facing and maker retention; viewer state controls depth).
+- J3: AI sketch-to-design — V2/V3 deferred, still correct, not V1 scope.
+- J1: "Share My Idea" — open, awaiting clarification (V1 priority or push to V2?).
+
+**Section G — Competitive/Marketing:**
+- G1: Differentiation pillars documented (two-sided marketplace, maker retention, ideator-friendly, Etsy differentiation, 15% commission, accessibility aspiration). Need #1 pitch + 30-second elevator version — open.
+- G2: No-maker-available response strategy — open.
+- G3: Material categories live vs. placeholder — open.
+- G4: Platform-wide turnaround vs. per-bid timing — open.
+
+**Section I — Technical/Infrastructure:**
+- I1–I4: All open — can verify via read-only queries if authorized, otherwise note as "requires verification".
